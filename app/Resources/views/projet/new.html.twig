@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('projets_index') }}" class="btn btn-default" >Back to the list</a>
+    <h1>Projet creation</h1>
+
+    {{ form_start(form) }}
+    {% form_theme form 'bootstrap_4_layout.html.twig' %}
+        {{ form_widget(form) }}
+        <input type="submit" value="Create" class="btn btn-primary" />
+    {{ form_end(form) }}
+
+{% endblock %}

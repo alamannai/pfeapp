@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>La liste des projets</h1>
+        <p></p>
+    <table>
+            <tr>
+                <th>Sujet</th>
+                <th><div class="col-1"></div></th>
+                <th>Contenu</th>
+                <th><div class="col-1"></div></th>
+                <th>Datedebut</th>
+                <th><div class="col-1"></div></th>
+                <th>Duree</th>
+
+                <th></th>
+            </tr>
+
+        {% for projet in projets %}
+            <tr>
+                <td>{{ projet.sujet }}</td>
+                <td><div class="col-1"></div></td>
+                <td>{{ projet.contenu }}</td>
+                <td><div class="col-1"></div></td>
+                <td>{% if projet.dateDebut %}{{ projet.dateDebut|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td><div class="col-1"></div></td>
+                <td>{{ projet.duree }}</td>
+                <td><div class="col-1"></div></td>
+                <td> <a href="{{ path('projets_show', { 'id': projet.id }) }}" class="btn btn-success">Afficher</a></td>
+                <td><a href="{{ path('projets_edit', { 'id': projet.id }) }}" class="btn btn-info">Modifier</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+
+ 
+            <a href="{{ path('projets_new') }}" class="btn btn-primary">Nouveau projet</a>
+    
+{% endblock %}
