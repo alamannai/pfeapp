@@ -78,7 +78,7 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: 
-        AppBundle\Entity\User
+        AppBundle\Entity\Citoyen
     service:
             user_manager: my_user_manager
 

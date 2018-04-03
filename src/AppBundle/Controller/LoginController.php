@@ -8,16 +8,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use AppBundle\Entity\User;
-use AppBundle\Service\MyUserManager;
+use AppBundle\Entity\Citoyen;
+
 use \AppBundle\Helper\ControllerHelper;
 
 class LoginController extends Controller
 {
-    
-
     /**
-     * @Route("/login", name="user_login")
+     * @Route("/api/login", name="user_login")
      * @Method("POST")
      */
     public function loginAction(Request $request)
@@ -45,20 +43,24 @@ class LoginController extends Controller
         $response = new Response($this->serialize(['token' => $token]), Response::HTTP_OK);
 
         return $this->setBaseHeaders($response);
+
+
+        
     }
+
 
     /**
      * Returns token for user.
      *
-     * @param User $user
+     * @param Citoyen $user
      *
      * @return array
      */
-    public function getToken(User $user)
+    public function getToken(Citoyen $user)
     {
         return $this->container->get('lexik_jwt_authentication.encoder.default')
                 ->encode([
-                    'username' => $user->getUsername(),
+                    'email' => $user->getEmail(),
                     'exp' => $this->getTokenExpiryDateTime(),
                 ]);
     }

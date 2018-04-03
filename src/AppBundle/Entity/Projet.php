@@ -159,6 +159,24 @@ class Projet
     }
 
     
+    
 
+
+
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Commune", inversedBy="projets")
+     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
+     */
+    private $commune;
+
+   public function getCommune()
+   {
+     return $this->commune->getId();
+   }
+
+
+    
+      
 }
 

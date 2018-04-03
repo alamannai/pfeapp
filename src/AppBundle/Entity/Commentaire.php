@@ -96,10 +96,20 @@ class Commentaire
 
 
 
+   
+
+
     /**
      * @ORM\ManyToOne(targetEntity="Projet", inversedBy="commentaires")
      * @ORM\JoinColumn(name="projet_id", referencedColumnName="id")
      */
     private $projet;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Citoyen")
+     * @ORM\JoinColumn(name="citoyen_id", referencedColumnName="id")
+     */
+    private $citoyen;
 }
 

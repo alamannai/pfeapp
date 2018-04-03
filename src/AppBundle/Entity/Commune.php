@@ -3,7 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Commune
@@ -43,6 +45,21 @@ class Commune
      */
     private $pseudo;
 
+
+    /**
+     * @Assert\Length(max=4096)
+     */
+    protected $plainPassword;
+
+    /**
+     * @ORM\Column(type="string", length=64)
+     */
+    protected $password;
+
+    public function eraseCredentials()
+    {
+        return null;
+    }
 
     /**
      * Get id
@@ -127,9 +144,29 @@ class Commune
     }
 
 
-    public function getRoles()
+  public function getPassword()
     {
-        return array('ROLE_COMMUNE');
+        return $this->password;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    public function getSalt()
+    {
+        return null;
     }
 
 
@@ -137,10 +174,10 @@ class Commune
      * @ORM\OneToMany(targetEntity="Projet", mappedBy="Commune")
      */
     private $projets;
-
     public function __construct()
     {
         $this->projets = new ArrayCollection();
     }
+    
 }
 

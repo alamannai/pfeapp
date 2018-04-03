@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Entity\Projet;
+use AppBundle\Entity\Commune;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
@@ -21,11 +21,11 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * 
  *
- * @Route("api/projets")
+ * @Route("api/choix")
  */
 
 
-class ProjetController extends Controller
+class ChoixController extends Controller
 {
     /**
      * @Route("/")
@@ -33,59 +33,57 @@ class ProjetController extends Controller
      */
     public function listAction(Request $request)
     {
-        $commune_id=$request->query->get('commune');
-        $listepro=null;
+        $gouvernorat=$request->query->get('gouvernorat');
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
         $em = $this->getDoctrine()->getManager();
-        $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id]);
+        $communes = $em->getRepository('AppBundle:Commune')->findBy(['gouvernorat'=>$gouvernorat]);
+        $listecommune=null;
 
-        if (!(empty($projets))) {
-            $listepro= $projets;
-        }
+        foreach ($communes as $commune  ) {
+               $listecommune[]=array(
+                'id'=> $commune->getId(),
+               'nom' => $commune->getNom()
+           );
+            }
 
-        $response = $serializer->serialize($listepro, 'json');
+        $response = $serializer->serialize($listecommune, 'json');
          
         
         return new Response($response);
     
     }
 
- 
+
+
     /**
      *
      * @Route("/{id}")
      * @Method("GET")
      */
-    public function showProjet($id,Request $request)
+    public function showProjet($id)
     {
-        $commune_id=$request->query->get('commune');
-        $listepro=null;
-
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
         $em=$this->getDoctrine()->getManager();
-        $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id,'id' =>$id]);
+        $commune=$em->getRepository('AppBundle:Commune')->find($id);
 
-       
-        if (!(empty($projet))) {
-            $listepro=$projet;
-        }
+        $listecommune=array(
+                'id'=> $commune->getId(),
+               'nom' => $commune->getNom()
+           );
         
-        $response = $serializer->serialize($listepro, 'json');
+        $response = $serializer->serialize($listecommune, 'json');
         return new Response($response);
 
 
 
     }
-
-
-  
 
 
 }

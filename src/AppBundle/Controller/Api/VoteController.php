@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Entity\Projet;
+use AppBundle\Entity\vote;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
@@ -21,11 +21,11 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * 
  *
- * @Route("api/projets")
+ * @Route("api/projets/vote")
  */
 
 
-class ProjetController extends Controller
+class VoteController extends Controller
 {
     /**
      * @Route("/")
@@ -33,21 +33,21 @@ class ProjetController extends Controller
      */
     public function listAction(Request $request)
     {
-        $commune_id=$request->query->get('commune');
-        $listepro=null;
+        $projet_id=$request->query->get('projet');
+        $liste=null;
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
         $em = $this->getDoctrine()->getManager();
-        $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id]);
+        $votes = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet_id]);
 
-        if (!(empty($projets))) {
-            $listepro= $projets;
+        if (!(empty($votes))) {
+            $liste= $votes;
         }
 
-        $response = $serializer->serialize($listepro, 'json');
+        $response = $serializer->serialize($liste, 'json');
          
         
         return new Response($response);
@@ -60,24 +60,20 @@ class ProjetController extends Controller
      * @Route("/{id}")
      * @Method("GET")
      */
-    public function showProjet($id,Request $request)
+    public function showProjet($id)
     {
-        $commune_id=$request->query->get('commune');
-        $listepro=null;
+     
 
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
         $em=$this->getDoctrine()->getManager();
-        $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id,'id' =>$id]);
+        $vote=$em->getRepository('AppBundle:Vote')->find($id);
 
        
-        if (!(empty($projet))) {
-            $listepro=$projet;
-        }
         
-        $response = $serializer->serialize($listepro, 'json');
+        $response = $serializer->serialize($vote, 'json');
         return new Response($response);
 
 
