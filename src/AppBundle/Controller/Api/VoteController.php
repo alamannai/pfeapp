@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\vote;
+use AppBundle\Entity\Projet;
+use AppBundle\Entity\Citoyen;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
@@ -43,10 +45,14 @@ class VoteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $votes = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet_id]);
 
-        if (!(empty($votes))) {
-            $liste= $votes;
+        foreach ($votes as $vote ) {
+            $nom=$vote->getCitoyen()->getNom();
+            $prenom=$vote->getCitoyen()->getPrenom();
+            $liste[]=$prenom.' '.$nom;
         }
+        
 
+        
         $response = $serializer->serialize($liste, 'json');
          
         

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="Citoyens")
  */
-class Citoyen extends BaseUser
+class Citoyen 
 {
     /**
      * @ORM\Id
@@ -41,6 +41,11 @@ class Citoyen extends BaseUser
     }
 
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
 
     public function setNom($nom)
     {
@@ -63,4 +68,7 @@ class Citoyen extends BaseUser
     {
         return $this->prenom;
     }
+
+
+
 }

@@ -51,11 +51,9 @@ class Vote
      * @ORM\JoinColumn(name="citoyen_id", referencedColumnName="id")
      */
     private $citoyen;
-
     public function getCitoyen()
    {
-     return $this->citoyen->getId();
+     return $this->citoyen;
    }
-
 }
 
