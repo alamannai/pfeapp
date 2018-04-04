@@ -34,7 +34,7 @@ trait ControllerHelper
         $context = new SerializationContext();
         $context->setSerializeNull(true);
 
-        return $this->get('jms_serializer')
+        return $this->get('serializer')
             ->serialize($data, 'json', $context);
     }
 }

@@ -9,16 +9,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use AppBundle\Entity\Citoyen;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\JsonSerializable;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use  Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-use \AppBundle\Helper\ControllerHelper;
+use AppBundle\Helper\ControllerHelper;
 
 class LoginController extends Controller
 {
+
     /**
-     * @Route("/api/login", name="user_login")
+     * @Route("/login", name="user_login")
      * @Method("POST")
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
         $usernameOrEmail = $request->getUser();
         $password = $request->getPassword();
@@ -43,9 +52,6 @@ class LoginController extends Controller
         $response = new Response($this->serialize(['token' => $token]), Response::HTTP_OK);
 
         return $this->setBaseHeaders($response);
-
-
-        
     }
 
 

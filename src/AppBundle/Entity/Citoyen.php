@@ -148,4 +148,22 @@ class Citoyen implements UserInterface
         return $this->email;
     }
 
+
+    /**
+     * Random string sent to the user email address in order to verify it.
+     *
+     * @var string|null
+     */
+    protected $confirmationToken;
+
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+
 }

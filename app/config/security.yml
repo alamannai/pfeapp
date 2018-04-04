@@ -5,32 +5,34 @@ security:
         AppBundle\Entity\Commune: bcrypt
 
     providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username_email
+        database_users:
+            entity: { class: AppBundle:Citoyen, property: email }
 
-    firewalls:
-        api_register:
-            pattern: ^/api/register
-            anonymous: true
+    firewalls: 
         login:
-            pattern: ^/api/login
-            logout:       true
-            anonymous:    true
+            pattern:  ^/api/login
+            stateless: true
+            anonymous: true
             form_login:
-                check_path: /api/login_check
-                username_parameter: _email
-                password_parameter: _password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                check_path:               /api/login_check
+                username_parameter:       email
+                password_parameter:       password    
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
+
         api:
             pattern:   ^/api
             stateless: true
-            anonymous:    true
+            anonymous: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator  
         
         
         main:
             pattern: ^/
             logout:       true
             anonymous:    true
-    
+
+
