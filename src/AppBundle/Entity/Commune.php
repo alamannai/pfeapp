@@ -2,10 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Commune
@@ -27,7 +25,7 @@ class Commune
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=255, unique=true)
+     * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
 
@@ -46,20 +44,6 @@ class Commune
     private $pseudo;
 
 
-    /**
-     * @Assert\Length(max=4096)
-     */
-    protected $plainPassword;
-
-    /**
-     * @ORM\Column(type="string", length=64)
-     */
-    protected $password;
-
-    public function eraseCredentials()
-    {
-        return null;
-    }
 
     /**
      * Get id
@@ -143,31 +127,6 @@ class Commune
         return $this->pseudo;
     }
 
-
-  public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword($plainPassword)
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
-    public function getSalt()
-    {
-        return null;
-    }
 
 
     /**

@@ -77,6 +77,7 @@ class VoteController extends Controller
         $em=$this->getDoctrine()->getManager();
         $vote=$em->getRepository('AppBundle:Vote')->find($id);
 
+
        
         
         $response = $serializer->serialize($vote, 'json');

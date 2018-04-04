@@ -72,9 +72,11 @@ class ProjetController extends Controller
         $em=$this->getDoctrine()->getManager();
         $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id,'id' =>$id]);
 
-       
+
         if (!(empty($projet))) {
+
             $listepro=$projet;
+           
         }
         
         $response = $serializer->serialize($listepro, 'json');

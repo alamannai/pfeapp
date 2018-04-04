@@ -159,7 +159,21 @@ class Projet
     }
 
     
-    
+     /**
+     * @ORM\OneToMany(targetEntity="Vote", mappedBy="projet")
+     */
+    private $votes;
+
+    public function __construct()
+    {
+        $this->votes = new ArrayCollection();
+    }
+
+ 
+    public function getVotes()
+    {
+        return count($this->votes);
+    }
 
 
 

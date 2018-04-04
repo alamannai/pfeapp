@@ -1,7 +1,8 @@
 
 security:
     encoders:
-        FOS\UserBundle\Model\UserInterface: bcrypt
+        AppBundle\Entity\Citoyen: bcrypt
+        AppBundle\Entity\Commune: bcrypt
 
     providers:
         fos_userbundle:
