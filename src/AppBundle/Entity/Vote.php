@@ -42,8 +42,13 @@ class Vote
 
     public function getProjet()
    {
-     return $this->projet->getId();
+     return $this->projet;
    }
+
+   public function setProjet(Projet $projet)
+    {   
+        $this->projet = $projet;
+    }
 
 
     /**
@@ -56,5 +61,10 @@ class Vote
    {
      return $this->citoyen;
    }
+
+   public function setCitoyen(Citoyen $citoyen)
+    {   
+        $this->citoyen = $citoyen;
+    }
 }
 

@@ -21,14 +21,14 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * 
  *
- * @Route("api/choix")
+ * @Route("")
  */
 
 
 class ChoixController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("api/commune/")
      * @Method("GET")
      */
     public function listAction(Request $request)
@@ -61,10 +61,10 @@ class ChoixController extends Controller
 
     /**
      *
-     * @Route("/{id}")
+     * @Route("api/commune/{id}")
      * @Method("GET")
      */
-    public function showProjet($id)
+    public function showAction($id)
     {
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());

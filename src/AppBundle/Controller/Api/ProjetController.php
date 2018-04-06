@@ -18,22 +18,17 @@ use Symfony\Component\Serializer\JsonSerializable;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-/**
- * 
- *
- * @Route("api/projets")
- */
+
 
 
 class ProjetController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("api/commune/{commune}/projets/")
      * @Method("GET")
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request,$commune)
     {
-        $commune_id=$request->query->get('commune');
         $listepro=null;
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
@@ -41,7 +36,7 @@ class ProjetController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
         
         $em = $this->getDoctrine()->getManager();
-        $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id]);
+        $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune]);
 
         if (!(empty($projets))) {
             $listepro= $projets;
@@ -57,12 +52,12 @@ class ProjetController extends Controller
  
     /**
      *
-     * @Route("/{id}")
+     * @Route("api/commune/{commune}/projets/{id}")
      * @Method("GET")
      */
-    public function showProjet($id,Request $request)
+    public function showProjet($id,Request $request,$commune)
     {
-        $commune_id=$request->query->get('commune');
+        $commune_id=$commune;
         $listepro=null;
 
         $encoders = array(new XmlEncoder(), new JsonEncoder());
