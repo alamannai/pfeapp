@@ -21,14 +21,14 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * 
  *
- * @Route("")
+ * @Route("api/commune")
  */
 
 
 class ChoixController extends Controller
 {
     /**
-     * @Route("api/commune/")
+     * @Route("/")
      * @Method("GET")
      */
     public function listAction(Request $request)
@@ -61,7 +61,7 @@ class ChoixController extends Controller
 
     /**
      *
-     * @Route("api/commune/{id}")
+     * @Route("/{id}")
      * @Method("GET")
      */
     public function showAction($id)
@@ -75,7 +75,8 @@ class ChoixController extends Controller
 
         $listecommune=array(
                 'id'=> $commune->getId(),
-               'nom' => $commune->getNom()
+               'nom' => $commune->getNom(),
+               'gouvernorat' =>$commune->getGouvernorat()
            );
         
         $response = $serializer->serialize($listecommune, 'json');

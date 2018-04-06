@@ -164,10 +164,7 @@ class Projet
      */
     private $votes;
 
-    public function __construct()
-    {
-        $this->votes = new ArrayCollection();
-    }
+    
 
  
     public function getVotes()
@@ -175,6 +172,26 @@ class Projet
         return count($this->votes);
     }
 
+    /**
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="projet")
+     */
+    private $commentaires;
+
+    
+
+ 
+    public function getCommentaires()
+    {
+        $comms=$this->commentaires;
+        $c=0;
+        foreach ( $comms as $commentaire) {
+        
+        if ($commentaire->getValidation()==true) {
+            $c++;
+        }
+    }
+    return $c;
+}
 
 
 

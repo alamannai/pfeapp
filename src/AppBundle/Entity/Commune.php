@@ -128,15 +128,6 @@ class Commune
     }
 
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Projet", mappedBy="Commune")
-     */
-    private $projets;
-    public function __construct()
-    {
-        $this->projets = new ArrayCollection();
-    }
     
 }
 

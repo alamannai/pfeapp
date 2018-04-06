@@ -57,7 +57,6 @@ class Commentaire
     {
         $this->contenu = $contenu;
 
-        return $this;
     }
 
     /**
@@ -81,7 +80,6 @@ class Commentaire
     {
         $this->validation = $validation;
 
-        return $this;
     }
 
     /**
@@ -105,11 +103,31 @@ class Commentaire
      */
     private $projet;
 
+    public function getProjet()
+   {
+     return $this->projet;
+   }
+
+   public function setProjet(Projet $projet)
+    {   
+        $this->projet = $projet;
+    }
+
 
     /**
-     * @ORM\OneToOne(targetEntity="Citoyen")
+     * @ORM\ManyToOne(targetEntity="Citoyen")
      * @ORM\JoinColumn(name="citoyen_id", referencedColumnName="id")
      */
     private $citoyen;
+
+    public function getCitoyen()
+   {
+     return $this->citoyen;
+   }
+
+   public function setCitoyen(Citoyen $citoyen)
+    {   
+        $this->citoyen = $citoyen;
+    }
 }
 

@@ -19,12 +19,15 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 
-
+  /**
+     * @Route("api/commune/{commune}/projets")
+     * 
+     */  
 
 class ProjetController extends Controller
 {
     /**
-     * @Route("api/commune/{commune}/projets/")
+     * @Route("/")
      * @Method("GET")
      */
     public function listAction(Request $request,$commune)
@@ -52,7 +55,7 @@ class ProjetController extends Controller
  
     /**
      *
-     * @Route("api/commune/{commune}/projets/{id}")
+     * @Route("/{id}")
      * @Method("GET")
      */
     public function showProjet($id,Request $request,$commune)
@@ -67,6 +70,7 @@ class ProjetController extends Controller
         $em=$this->getDoctrine()->getManager();
         $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id,'id' =>$id]);
 
+        
 
         if (!(empty($projet))) {
 

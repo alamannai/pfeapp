@@ -11,10 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Entity\Vote;
+use AppBundle\Entity\Commentaire;
 use AppBundle\Entity\Projet;
 use AppBundle\Entity\Citoyen;
-use AppBundle\Form\VoteType;
+use AppBundle\Form\CommentaireType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
@@ -22,12 +22,12 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
   /**
-     * @Route("api/commune/{commune}/projets/{projet}/votes")
+     * @Route("api/commune/{commune}/projets/{projet}/commentaires")
      * 
      */  
 
 
-class VoteController extends Controller
+class CommentaireController extends Controller
 {
     /**
      * @Route("/")
@@ -55,16 +55,25 @@ class VoteController extends Controller
 
         
         $em = $this->getDoctrine()->getManager();
-        $votes = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet]);
+        $commentaires = $em->getRepository('AppBundle:Commentaire')->findBy(['projet' => $projet]);
 
-        foreach ($votes as $vote ) {
-            $nom=$vote->getCitoyen()->getNom();
-            $prenom=$vote->getCitoyen()->getPrenom();
-            $liste[]=$prenom.' '.$nom;
+        foreach ($commentaires as $commentaire ) {
+
+            if ($commentaire->getValidation()==true) {
+
+                $nom=$commentaire->getCitoyen()->getNom();
+                $prenom=$commentaire->getCitoyen()->getPrenom();
+                $np=$prenom.' '.$nom;
+                $liste[]=array(
+                    'commentaire'=>$commentaire->getContenu() ,
+                    'projet' => $projet,
+                    'Citoyen'=> $np
+                );
             }
         
         }
     }
+}
         
         $response = $serializer->serialize($liste, 'json');
          
@@ -76,7 +85,7 @@ class VoteController extends Controller
  
 
   /**
-     * @Route("/new", name="new_vote")
+     * @Route("/new")
      * @Method("POST")
      */
     public function newAction(Request $request,$projet,$commune)
@@ -88,6 +97,7 @@ class VoteController extends Controller
 
 
         $citoyen_id=$request->request->get('citoyen');
+        $contenu=$request->request->get('contenu');
         
     
         $em = $this->getDoctrine()->getManager();
@@ -105,25 +115,21 @@ class VoteController extends Controller
         if ($c==$commune) {
 
 
-        $vote = new Vote();
-        $vote->setCitoyen($citoyen);
-        $vote->setProjet($p);
+        $commentaire = new Commentaire();
+        $commentaire->setCitoyen($citoyen);
+        $commentaire->setProjet($p);
+        $commentaire->setContenu($contenu);
+        $commentaire->setValidation(false);
         
 
-        $form = $this->createForm(VoteType::class, $vote);
+        $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
- 
-        
-        $em = $this->getDoctrine()->getManager();
-        $votecheck = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet , 'citoyen' => $citoyen_id]);
 
-        if ($votecheck== null) {
-
-            $em->persist($vote);
-            $em->flush();
+        $em->persist($commentaire);
+        $em->flush();
 
             $rep =true;
-        }
+        
     }
 }
         
