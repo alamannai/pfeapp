@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\JsonSerializable;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-  /**
+    /**
      * @Route("api/commune/{commune}/projets/{projet}/commentaires")
      * 
      */  
@@ -65,8 +65,10 @@ class CommentaireController extends Controller
                 $prenom=$commentaire->getCitoyen()->getPrenom();
                 $np=$prenom.' '.$nom;
                 $liste[]=array(
+                    'id'=>$commentaire->getId(),
                     'commentaire'=>$commentaire->getContenu() ,
-                    'projet' => $projet,
+                    'projet_id' => $projet,
+                    'Citoyen_id' => $commentaire->getCitoyen()->getId(),
                     'Citoyen'=> $np
                 );
             }
@@ -84,7 +86,7 @@ class CommentaireController extends Controller
 
  
 
-  /**
+    /**
      * @Route("/new")
      * @Method("POST")
      */
@@ -113,8 +115,6 @@ class CommentaireController extends Controller
         
 
         if ($c==$commune) {
-
-
         $commentaire = new Commentaire();
         $commentaire->setCitoyen($citoyen);
         $commentaire->setProjet($p);
@@ -130,8 +130,8 @@ class CommentaireController extends Controller
 
             $rep =true;
         
-    }
-}
+         }
+        }
         
        
 
