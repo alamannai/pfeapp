@@ -49,6 +49,14 @@ class Citoyen implements UserInterface
     protected $role;
 
     /**
+    * The salt to use for hashing.
+     *
+    * @var string
+    */
+    protected $salt;
+        
+
+    /**
      * @Assert\Length(max=4096)
      */
     protected $plainPassword;
@@ -149,21 +157,10 @@ class Citoyen implements UserInterface
     }
 
 
-    /**
-     * Random string sent to the user email address in order to verify it.
-     *
-     * @var string|null
+     /**
+     * @ORM\OneToMany(targetEntity="Liste", mappedBy="Citoyen")
      */
-    protected $confirmationToken;
-
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfirmationToken()
-    {
-        return $this->confirmationToken;
-    }
-
+    private $liste;
+     
 
 }

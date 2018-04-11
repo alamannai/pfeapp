@@ -7,32 +7,37 @@ security:
     providers:
         database_users:
             entity: { class: AppBundle:Citoyen, property: email }
+        users:    
+            entity: { class: AppBundle:Commune, property: pseudo }
 
     firewalls: 
-        login:
+       
+
+
+        # Citoyen
+        api_Citoyen_login:
             pattern:  ^/api/login
             stateless: true
             anonymous: true
+            provider: database_users
             form_login:
-                check_path:               /api/login_check
-                username_parameter:       email
-                password_parameter:       password    
-                success_handler:          lexik_jwt_authentication.handler.authentication_success
-                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
-
-        api:
-            pattern:   ^/api
-            stateless: true
-            anonymous: true
-            guard:
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator  
-        
+                username_parameter: email
+                password_parameter: password
+ 
         
         main:
             pattern: ^/
-            logout:       true
             anonymous:    true
+            provider:  users
+            guard:
+                authenticators:
+                    - app.form_login_authenticator
+            logout:
+                path: /logout
+                target: /        
 
 

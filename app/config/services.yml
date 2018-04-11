@@ -6,7 +6,7 @@ parameters:
 services:
     token_authenticator:
         class: AppBundle\Security\TokenAuthenticator
-        arguments: ['lexik_jwt_authentication.encoder.default', '@doctrine.orm.entity_manager']
+        arguments: ['@lexik_jwt_authentication.encoder.default', '@doctrine.orm.entity_manager']
 
     my_user_manager:
         class: AppBundle\Service\MyUserManager
@@ -45,3 +45,7 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    app.form_login_authenticator:
+        class: AppBundle\Security\FormLoginAuthenticator
+        arguments: ["@router", "@security.password_encoder"]

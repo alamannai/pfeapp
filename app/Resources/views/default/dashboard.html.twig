@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<nav class="navbar fixed-top navbar-dark bg-dark">
+      <a class="navbar-brand" href="/"><h4>{{ app.user.nom }}</h4></a>
+     
+	 
+	
+	
+	<!-- Default dropleft button -->
+		<div class="btn-group dropleft">
+			<button type="button" class="btn btn-primary">
+  			Notifications <span class="badge badge-light">4</span>
+			</button>
+  			<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    		Action
+  			</button>
+  			
+ 		 	<div class="dropdown-menu">
+   			 	<a class="dropdown-item"  href="{{path('logout')}}">Logout</a>
+  			</div>
+		</div>
+
+    </nav>
+	<div class="container">
+	<h1>Bienvenu</h1>
+   
+            
+    </div>        
+{% endblock %}

@@ -36,7 +36,7 @@ class VoteController extends Controller
     public function listAction(Request $request,$projet,$commune)
     {
 
-        $liste=null;
+        
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
@@ -45,28 +45,62 @@ class VoteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $p = $em->getRepository('AppBundle:Projet')->find( $projet);
 
-        if ($p!=null) {
+        
         $c=$p->getCommune();
         
-
-        
-
         if ($c==$commune) {
-
         
-        $em = $this->getDoctrine()->getManager();
-        $votes = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet]);
 
-        foreach ($votes as $vote ) {
-            $nom=$vote->getCitoyen()->getNom();
-            $prenom=$vote->getCitoyen()->getPrenom();
-            $liste[]=$prenom.' '.$nom;
-            }
+        if ($p!=null) {
+
+                
+                        $em = $this->getDoctrine()->getManager();
+                        $votes = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet]);
+                             
+                                foreach ($votes as $vote ) {
+                            $nom=$vote->getCitoyen()->getNom();
+                            $prenom=$vote->getCitoyen()->getPrenom();
+                            $liste[]=$prenom.' '.$nom;
+                            }
+
+                                            if (count($votes)==0) {
+                                                $rep=array( 
+                                               'status' => 'true',
+                                                'data' => '',
+                                                'msg' => 'Aucune vote'
+                                                );
+                                            }else{
+                                                $rep=array(
+                                            'status' => 'true',
+                                            'data' => $liste,
+                                            'msg' => 'La liste de votes' 
+                                            ); 
+                                            }
+
+                             }else{
+                                 $rep=array(
+                                    'status' => 'false',
+                                    'data' => '',
+                                    'msg' => 'Invalide Projet'
+                                    ); 
+                             }
+                
+           
         
+        }else{
+           
+            $rep=array(
+                                    'status ' => 'false' ,
+                                    'data ' => '',
+                                    'msg ' => 'Invalide Commune'
+
+                                    );
         }
-    }
+
+    
+    
         
-        $response = $serializer->serialize($liste, 'json');
+        $response = $serializer->serialize($rep, 'json');
          
         
         return new Response($response);

@@ -79,6 +79,7 @@ fos_user:
     firewall_name: main
     user_class: 
         AppBundle\Entity\Citoyen
+        
     service:
             user_manager: my_user_manager
 

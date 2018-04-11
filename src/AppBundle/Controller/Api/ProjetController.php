@@ -32,18 +32,47 @@ class ProjetController extends Controller
      */
     public function listAction(Request $request,$commune)
     {
-        $listepro=null;
+        $em = $this->getDoctrine()->getManager();
+        $commune = $em->getRepository('AppBundle:Commune')->find( $commune);
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
-        $em = $this->getDoctrine()->getManager();
-        $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune]);
+        if (!(empty($commune))){
+            $em = $this->getDoctrine()->getManager();
+            $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune]);
 
-        if (!(empty($projets))) {
-            $listepro= $projets;
+            if (!(empty($projets))) {
+
+                $listepro= array(
+                    'status ' => true ,
+                    'data ' => $projets,
+                    'msg ' => ' La liste des projets'
+
+
+                );
+            
+            
+            }else{
+            $listepro=array(
+                'status ' => true ,
+                'data ' => '',
+                'msg ' => 'Aucun projet'
+
+                );
         }
+
+        }else{
+            $listepro=array(
+                'status ' => false ,
+                'data ' => '',
+                'msg ' => 'Aucune Commune'
+
+                );
+        }
+
+        
 
         $response = $serializer->serialize($listepro, 'json');
          
@@ -60,23 +89,49 @@ class ProjetController extends Controller
      */
     public function showProjet($id,Request $request,$commune)
     {
-        $commune_id=$commune;
-        $listepro=null;
+        $em = $this->getDoctrine()->getManager();
+        $commune = $em->getRepository('AppBundle:Commune')->find( $commune);
+
 
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
+        if (!(empty($commune))){
+
         $em=$this->getDoctrine()->getManager();
-        $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune_id,'id' =>$id]);
+        $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune'=> $commune, 'id'=> $id]);
 
         
 
         if (!(empty($projet))) {
 
-            $listepro=$projet;
+            $listepro= array(
+                    'status ' => true ,
+                    'data ' => $projet,
+                    'msg ' => ' Le projet'
+
+
+                );
+        }else{
+            $listepro=array(
+                'status ' => false ,
+                'data ' => '',
+                'msg ' => 'Aucun projet'
+
+                );
+        }
            
         }
+        else{
+           $listepro= array(
+                'status ' => false ,
+                'data ' => '',
+                'msg ' => 'Aucune Commune'
+
+                );
+        }
+    
         
         $response = $serializer->serialize($listepro, 'json');
         return new Response($response);

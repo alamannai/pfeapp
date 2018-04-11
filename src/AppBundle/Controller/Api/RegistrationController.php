@@ -45,8 +45,8 @@ class RegistrationController extends Controller
         $email=$request->request->get('email');
         $password=$request->request->get('password');
 
-
-    
+        if ($nom && $prenom && $email && $password) {
+            
         $citoyen = new Citoyen();
         $citoyen->setNom($nom);
         $citoyen->setPrenom($prenom);
@@ -71,13 +71,29 @@ class RegistrationController extends Controller
             $em->flush();
 
             $rep =array(
+              'status' => true,  
+              'data'=> $email,
              'msg' => 'compte cree'
+
              );
         }else{
-            $rep =null;
+            $rep =array(
+                'status'=> false ,
+                'data' => $email,
+                'msg' => 'email utilise'
+            );
         }
         
        
+        }else{
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'verifier les champs'
+
+             );
+        }
+    
 
 
            

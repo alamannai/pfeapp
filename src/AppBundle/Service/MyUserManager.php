@@ -14,10 +14,10 @@ class MyUserManager extends UserManager
     {
         $user = parent::findUserByUsernameOrEmail($usernameOrEmail);
         if (null === $user) {
-            $userAddOnEmailRepo = $this->objectManager->getRepository('AppBundle:UserAddOnEmail');
+            $userAddOnEmailRepo = $this->objectManager->getRepository('AppBundle:Citoyen');
             $userAddOnEmail = $userAddOnEmailRepo->findOneBy(['email' => $usernameOrEmail]);
             if ($userAddOnEmail) {
-                $user = $userAddOnEmail->getUser();
+                $user = $userAddOnEmail->getCitoyen();
             }
         }
 

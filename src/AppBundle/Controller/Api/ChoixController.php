@@ -41,16 +41,31 @@ class ChoixController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $communes = $em->getRepository('AppBundle:Commune')->findBy(['gouvernorat'=>$gouvernorat]);
-        $listecommune=null;
-
-        foreach ($communes as $commune  ) {
+        
+        if (!empty($communes)) {
+            foreach ($communes as $commune  ) {
                $listecommune[]=array(
                 'id'=> $commune->getId(),
                'nom' => $commune->getNom()
            );
-            }
 
-        $response = $serializer->serialize($listecommune, 'json');
+        }
+            $rep=array(
+                'status' => true ,
+                'data' => $listecommune,
+                'msg' => 'La liste des communes'
+            );
+        }else{
+            $rep=array(
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Aucune commune'
+            );
+        }
+        
+            
+
+        $response = $serializer->serialize($rep, 'json');
          
         
         return new Response($response);

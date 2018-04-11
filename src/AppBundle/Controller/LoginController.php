@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use AppBundle\Entity\Citoyen;
+use AppBundle\Form\CitoyenType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -23,37 +24,65 @@ use AppBundle\Helper\ControllerHelper;
 class LoginController extends Controller
 {
 
-    /**
-     * @Route("/login", name="user_login")
+   /**
+     * @Route("/api/login", name="login")
      * @Method("POST")
      */
-    public function loginAction()
+    public function loginAction(Request $request)
     {
-        $usernameOrEmail = $request->getUser();
-        $password = $request->getPassword();
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
 
-        /** @var MyUserManager */
-        $userManager = $this->get('my_user_manager');
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
 
-        $user = $userManager->findUserByUsernameOrEmail($usernameOrEmail);
+        $em = $this->getDoctrine()->getManager();
+        $citoyen = $em->getRepository('AppBundle:Citoyen')->findOneBy(['email' => $email]);
 
-        if (!$user) {
-            throw $this->createNotFoundException();
+        if ($citoyen) {
+
+             
+
+           $encode = $this->get('security.password_encoder');
+            $pass=$encode->isPasswordValid($citoyen, $password);
+
+            
+
+        if ($pass) {
+            
+            $token = $this->getToken($citoyen);
+            $rep=array(
+                'status' => true,
+                'data' => $token,
+                'msg' => 'authentifie reussi '
+            );
+        
+
+        }else{
+            $rep=array(
+                'status' => false,
+                'data' => '',
+                'msg' => 'verifier le mot de passe'
+            );
         }
-
-        $isValid = $this->get('security.password_encoder')
-            ->isPasswordValid($user, $password);
-
-        if (!$isValid) {
-            throw new BadCredentialsException();
-        }
-
-        $token = $this->getToken($user);
-        $response = new Response($this->serialize(['token' => $token]), Response::HTTP_OK);
-
-        return $this->setBaseHeaders($response);
     }
+           
+        else{
+            $rep=array(
+                'status' => false,
+                'data' => '',
+                'msg' => 'verifier votre mail '
+            );
+        }
 
+        
+        
+       
+        $response = $serializer->serialize($rep, 'json');
+
+        return new Response($response);
+    }
 
     /**
      * Returns token for user.
@@ -64,7 +93,7 @@ class LoginController extends Controller
      */
     public function getToken(Citoyen $user)
     {
-        return $this->container->get('lexik_jwt_authentication.encoder.default')
+        return $this->container->get('lexik_jwt_authentication.encoder')
                 ->encode([
                     'email' => $user->getEmail(),
                     'exp' => $this->getTokenExpiryDateTime(),

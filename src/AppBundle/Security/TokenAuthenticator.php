@@ -69,7 +69,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         $email = $data['email'];
 
         return $this->em
-            ->getRepository('AppBundle:User')
+            ->getRepository('AppBundle:Citoyen')
             ->findOneBy(['email' => $email]);
     }
 
