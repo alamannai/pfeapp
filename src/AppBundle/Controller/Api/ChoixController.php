@@ -80,9 +80,9 @@ class ChoixController extends Controller
      * @Route("/{gouvernorat}")
      * @Method("GET")
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request ,$gouvernorat)
     {
-        $gouvernorat=$request->query->get('gouvernorat');
+
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
