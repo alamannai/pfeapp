@@ -27,8 +27,57 @@ use Symfony\Component\Serializer\Serializer;
 
 class ChoixController extends Controller
 {
+
+
+
+
     /**
      * @Route("/")
+     * @Method("GET")
+     */
+    public function govlistAction(Request $request)
+    {
+
+        $encoders = array( new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+        
+        $em = $this->getDoctrine()->getManager();
+        $gouvernorats = $em->getRepository('AppBundle:Commune')->findall();
+
+
+        foreach ($gouvernorats as $gouvernorat) {
+            $govi= $gouvernorat->getGouvernorat();
+            $listi[]=$govi;
+        }
+        
+        $ng=$listi[0];
+        $listf[]=$ng;
+
+        for ($i=1; $i <count($gouvernorats) ; $i++) { 
+            if (!($ng==$listi[$i])) {
+                $listf[]=$listi[$i];
+            }
+            else{$ng=$listi[$i];
+            }
+        }
+
+        $rep=array(
+            'status' => true ,
+            'data' => $listf,
+            'msg' => 'les gouvernorats existants'
+        );
+            
+
+        $response = $serializer->serialize($rep, 'json');
+         
+        
+        return new Response($response);
+    
+    }
+
+    /**
+     * @Route("/{gouvernorat}")
      * @Method("GET")
      */
     public function listAction(Request $request)

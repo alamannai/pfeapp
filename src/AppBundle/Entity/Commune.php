@@ -30,12 +30,6 @@ class Commune implements UserInterface
      */
     private $nom;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="gouvernorat", type="string", length=255)
-     */
-    private $gouvernorat;
 
     /**
      * @var string
@@ -80,29 +74,8 @@ class Commune implements UserInterface
         return $this->nom;
     }
 
-    /**
-     * Set gouvernorat
-     *
-     * @param string $gouvernorat
-     *
-     * @return Commune
-     */
-    public function setGouvernorat($gouvernorat)
-    {
-        $this->gouvernorat = $gouvernorat;
-
-        return $this;
-    }
-
-    /**
-     * Get gouvernorat
-     *
-     * @return string
-     */
-    public function getGouvernorat()
-    {
-        return $this->gouvernorat;
-    }
+    
+   
 
     /**
      * Set pseudo
@@ -210,5 +183,26 @@ class Commune implements UserInterface
      * @ORM\OneToMany(targetEntity="Liste", mappedBy="Citoyen")
      */
     private $liste;
+
+
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gouvernorat", type="string", length=255)
+     */
+    private $gouvernorat;
+ public function setGouvernorat( $gouvernorat)
+    {
+        $this->gouvernorat = $gouvernorat;
+
+    }
+
+    public function getGouvernorat()
+    {
+        return $this->gouvernorat;
+    }
 }
 
