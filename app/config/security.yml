@@ -2,33 +2,35 @@
 security:
     encoders:
         AppBundle\Entity\Citoyen: bcrypt
-        AppBundle\Entity\Commune: bcrypt
+
+
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_CITOYEN
+        ROLE_SUPER_ADMIN: ROLE_cOMMUNE
 
     providers:
-        database_users:
-            entity: { class: AppBundle:Citoyen, property: email }
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
         users:    
             entity: { class: AppBundle:Commune, property: pseudo }
 
     firewalls: 
-       
-
-
-        # Citoyen
-        api_Citoyen_login:
-            pattern:  ^/api/login
-            stateless: true
-            anonymous: true
-            provider: database_users
-            form_login:
-                check_path: /api/login_check
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-                require_previous_session: false
-                username_parameter: email
-                password_parameter: password
- 
         
+
+        login:
+            pattern:    ^/api/login
+            stateless:  true
+            anonymous:  true
+
+            guard:
+                authenticators:
+                    - 'token_authenticator'
+            
+     
+                
+        
+               
         main:
             pattern: ^/
             anonymous:    true
@@ -38,6 +40,6 @@ security:
                     - app.form_login_authenticator
             logout:
                 path: /logout
-                target: /        
-
+                target: /
+ 
 

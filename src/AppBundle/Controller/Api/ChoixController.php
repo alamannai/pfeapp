@@ -65,9 +65,9 @@ class ChoixController extends Controller
         $rep=array(
             'status' => true ,
             'data' => $listf,
-            'msg' => 'les gouvernorats existants'
+            'msg '=>'les gouvernorats'
         );
-            
+        
 
         $response = $serializer->serialize($rep, 'json');
          

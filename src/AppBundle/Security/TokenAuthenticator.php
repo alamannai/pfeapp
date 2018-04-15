@@ -49,7 +49,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         $token = $extractor->extract($request);
 
         if (!$token) {
-            return false;
+            return;
         }
 
         return $token;

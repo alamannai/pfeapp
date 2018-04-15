@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+
 /**
  * citoyenRepository
  *
@@ -10,4 +11,5 @@ namespace AppBundle\Repository;
  */
 class citoyenRepository extends \Doctrine\ORM\EntityRepository
 {
+	
 }

@@ -15,13 +15,7 @@ class CitoyenType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class)
-            ->add('prenom', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password'],
-            ]);
+            ->add('prenom', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

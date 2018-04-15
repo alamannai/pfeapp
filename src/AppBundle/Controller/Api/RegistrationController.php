@@ -17,7 +17,6 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Entity\Projet;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
@@ -43,24 +42,29 @@ class RegistrationController extends Controller
         $nom=$request->request->get('nom');
         $prenom=$request->request->get('prenom');
         $email=$request->request->get('email');
-        $password=$request->request->get('password');
+        $password1=$request->request->get('password');
 
-        if ($nom && $prenom && $email && $password) {
+        if ($nom && $prenom && $email && $password1) {
             
         $citoyen = new Citoyen();
         $citoyen->setNom($nom);
         $citoyen->setPrenom($prenom);
         $citoyen->setEmail($email);
+        $citoyen->setUsername($email);
+        $citoyen->setPlainPassword($password1);
 
         $form = $this->createForm(CitoyenType::class, $citoyen);
         $form->handleRequest($request);
  
         $encoder = $this->get('security.password_encoder');
         $password = $encoder->encodePassword($citoyen, $citoyen->getPlainPassword());
+
             
 
-        $citoyen->setRole('ROLE_CITOYEN');
+        $citoyen->setRoles(['ROLE_CITOYEN']);
         $citoyen->setPassword($password);
+
+        $citoyen->setEnabled(true);
            
         $em = $this->getDoctrine()->getManager();
         $emailcheck = $em->getRepository('AppBundle:Citoyen')->findBy(['email' => $email]);

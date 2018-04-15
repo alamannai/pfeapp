@@ -22,7 +22,7 @@ class RegistrationCommuneController extends Controller
         $pseudo=$request->request->get('pseudo');
         $gouvernorat=$request->request->get('gouvernorat');
 
-       
+        
 
         // Create a new blank commune and process the form
         $commune = new Commune();

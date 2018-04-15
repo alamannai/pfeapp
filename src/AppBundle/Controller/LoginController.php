@@ -6,9 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use AppBundle\Entity\Citoyen;
+use AppBundle\Repository\citoyenRepository;
 use AppBundle\Form\CitoyenType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -19,69 +21,79 @@ use Symfony\Component\Serializer\Serializer;
 use  Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-use AppBundle\Helper\ControllerHelper;
+
 
 class LoginController extends Controller
 {
-
-   /**
-     * @Route("/api/login", name="login")
+    /**
+     * @Route("/api/login", name="user_login")
      * @Method("POST")
      */
     public function loginAction(Request $request)
     {
-        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
 
         $email = $request->request->get('email');
         $password = $request->request->get('password');
 
+    
+
         $em = $this->getDoctrine()->getManager();
-        $citoyen = $em->getRepository('AppBundle:Citoyen')->findOneBy(['email' => $email]);
+        $user = $em->getRepository('AppBundle:Citoyen')->findOneBy(['email' => $email]);
 
-        if ($citoyen) {
-
-             
-
-           $encode = $this->get('security.password_encoder');
-            $pass=$encode->isPasswordValid($citoyen, $password);
-
-            
-
-        if ($pass) {
-            
-            $token = $this->getToken($citoyen);
-            $rep=array(
-                'status' => true,
-                'data' => $token,
-                'msg' => 'authentifie reussi '
-            );
-        
-
-        }else{
-            $rep=array(
-                'status' => false,
-                'data' => '',
-                'msg' => 'verifier le mot de passe'
-            );
-        }
-    }
-           
-        else{
-            $rep=array(
-                'status' => false,
-                'data' => '',
-                'msg' => 'verifier votre mail '
-            );
-        }
-
-        
         
        
-        $response = $serializer->serialize($rep, 'json');
 
-        return new Response($response);
+        if (!$user) {
+         
+            $rep=array(
+            'status'=>false,
+            'data' => '',
+            'msg'=> "verifier l'email"
+        );
+        }else{
+            $encoder = $this->get('security.password_encoder');
+            $isValid=$encoder->isPasswordValid(
+            $user, // the encoded password
+            $password,       // the submitted password
+            $user->getSalt()
+        );
+
+            if (!$isValid) {
+         
+            
+            $rep=array(
+            'status'=>false,
+            'data' => '',
+            'msg'=> 'verifier le mot de passe'
+        );
+        }else{
+            $token = $this->getToken($user);
+            $rep=array(
+            'status'=>true,
+            'data' => $token,
+            'msg'=> 'welcome'
+        );
+        }
+
+        }
+
+        
+
+        
+
+        
+
+        
+
+        $response = new Response($serializer->serialize($rep, 'json'));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+
+        return $response;
     }
 
     /**

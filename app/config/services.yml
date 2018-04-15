@@ -8,13 +8,6 @@ services:
         class: AppBundle\Security\TokenAuthenticator
         arguments: ['@lexik_jwt_authentication.encoder.default', '@doctrine.orm.entity_manager']
 
-    my_user_manager:
-        class: AppBundle\Service\MyUserManager
-        arguments:
-                - '@fos_user.util.password_updater'
-                - '@fos_user.util.canonical_fields_updater'
-                - '@doctrine.orm.default_entity_manager'
-                - '%fos_user.model.user.class%'
 
     # default configuration for services in *this* file
     _defaults:
