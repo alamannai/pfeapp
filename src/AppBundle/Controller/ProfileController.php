@@ -1,6 +1,5 @@
 <?php
 
-// /src/AppBundle/Controller/RestProfileController.php
 
 namespace AppBundle\Controller;
 

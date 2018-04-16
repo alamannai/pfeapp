@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ListeCitoyens
  *
- * @ORM\Table(name="liste")
+ * @ORM\Table(name="listes")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ListeRepository")
  */
 class Liste

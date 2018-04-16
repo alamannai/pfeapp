@@ -67,7 +67,6 @@ class CommentaireController extends Controller
                 $liste[]=array(
                     'id'=>$commentaire->getId(),
                     'commentaire'=>$commentaire->getContenu() ,
-                    'projet_id' => $projet,
                     'Citoyen_id' => $commentaire->getCitoyen()->getId(),
                     'Citoyen'=> $np
                 );

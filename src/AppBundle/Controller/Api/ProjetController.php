@@ -39,15 +39,44 @@ class ProjetController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
-        if (!(empty($commune))){
+        if ($commune){
             $em = $this->getDoctrine()->getManager();
             $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune' => $commune]);
 
-            if (!(empty($projets))) {
+            if ($projets) {
+
+                foreach ($projets as $projet) {
+                    $em = $this->getDoctrine()->getManager();
+                    $e = $em->getRepository('AppBundle:EtatProjet')->findOneBy( [ 'projet'=>$projet->getId()]);
+
+                if ($projet->getDone()== null) {
+                        $msg='En cours de realisation';
+                }else {
+                        if ( $projet->getDone() == false) {
+
+                            $msg=$e->getReason();
+                        }else{
+
+                            $msg='Projet termine';
+                    }
+                }
+                    $list[]=array(
+                        'id' =>$projet->getId(),
+                        'sujet'=>$projet->getSujet(),
+                        'contenu'=>$projet->getContenu(),
+                        'Date de debut'=>$projet->getDateDebut(),
+                        'duree'=>$projet->getDuree(),
+                        'nombres de votes '=>$projet->getVotes(),
+                        'nombres de commentaires'=>$projet->getCommentaires(),
+                        'Etat'=>$msg
+                    );
+
+                   
+                }
 
                 $listepro= array(
                     'status ' => true ,
-                    'data ' => $projets,
+                    'data ' => $list,
                     'msg ' => ' La liste des projets'
 
 
@@ -67,7 +96,7 @@ class ProjetController extends Controller
             $listepro=array(
                 'status ' => false ,
                 'data ' => '',
-                'msg ' => 'Aucune Commune'
+                'msg ' => 'Invalide Commune'
 
                 );
         }
@@ -97,18 +126,43 @@ class ProjetController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
         
-        if (!(empty($commune))){
+        if ($commune){
 
         $em=$this->getDoctrine()->getManager();
-        $projet=$em->getRepository('AppBundle:Projet')->findBy(['commune'=> $commune, 'id'=> $id]);
+        $projet=$em->getRepository('AppBundle:Projet')->findOneBy(['commune'=> $commune, 'id'=> $id]);
 
         
 
-        if (!(empty($projet))) {
+        if ($projet) {
+
+            $em = $this->getDoctrine()->getManager();
+            $e = $em->getRepository('AppBundle:EtatProjet')->findOneBy( [ 'projet'=>$projet->getId()]);
+
+                if ($projet->getDone()== null) {
+                        $msg='En cours de realisation';
+                }else {
+                        if ($projet->getDone() == false) {
+
+                            $msg=$e->getReason();
+                        }else{
+
+                            $msg='Projet termine';
+                    }
+                }
+                    $li=array(
+                        'id' =>$projet->getId(),
+                        'sujet'=>$projet->getSujet(),
+                        'contenu'=>$projet->getContenu(),
+                        'Date de debut'=>$projet->getDateDebut(),
+                        'duree'=>$projet->getDuree(),
+                        'nombres de votes '=>$projet->getVotes(),
+                        'nombres de commentaires'=>$projet->getCommentaires(),
+                        'Etat'=>$msg
+                    );
 
             $listepro= array(
                     'status ' => true ,
-                    'data ' => $projet,
+                    'data ' => $li,
                     'msg ' => ' Le projet'
 
 

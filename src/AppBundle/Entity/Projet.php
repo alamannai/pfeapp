@@ -208,6 +208,39 @@ class Projet
 
 
     
+    /**
+    * @ORM\OneToOne(targetEntity="EtatProjet", cascade={"persist"})
+    */
+      private $etat;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="done", type="boolean",nullable=true)
+     */
+    private $done;
+
+    /**
+     * Set done
+     *
+     * @param bool $done
+     *
+     */
+    public function setDone($done)
+    {
+        $this->done = $done;
+
+    }
+
+    /**
+     * Get done
+     *
+     * @return bool
+     */
+    public function getDone()
+    {
+        return $this->done;
+    }
       
 }
 

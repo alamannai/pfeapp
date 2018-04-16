@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use AppBundle\Security\TokenAuthenticator;
 
   /**
      * @Route("api/commune/{commune}/projets/{projet}/votes")
@@ -120,15 +121,17 @@ class VoteController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
 
+        $email=$request->request->get('email') ;
 
-        $citoyen_id=$request->request->get('citoyen');
+        $em = $this->getDoctrine()->getManager();
+        $citoyen = $em->getRepository('AppBundle:Citoyen')->findOneBy([ 'email'=>$email]);
+
         
     
         $em = $this->getDoctrine()->getManager();
         $p = $em->getRepository('AppBundle:Projet')->find( $projet);
 
-        $emm = $this->getDoctrine()->getManager();
-        $citoyen = $emm->getRepository('AppBundle:Citoyen')->find($citoyen_id);
+       
 
         if ($p!=null) {
         $c=$p->getCommune();
@@ -151,7 +154,7 @@ class VoteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $votecheck = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet , 'citoyen' => $citoyen_id]);
 
-        if ($votecheck== null) {
+        if (!$votecheck) {
 
             $em->persist($vote);
             $em->flush();
@@ -162,7 +165,6 @@ class VoteController extends Controller
 }
         
        
-
 
            
 
