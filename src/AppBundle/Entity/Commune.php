@@ -188,21 +188,21 @@ class Commune implements UserInterface
 
 
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="gouvernorat", type="string", length=255)
+     /**
+     * @ORM\ManyToOne(targetEntity="Gouvernorat", inversedBy="communes")
+     * @ORM\JoinColumn(name="gouvernorat_id", referencedColumnName="id")
      */
     private $gouvernorat;
- public function setGouvernorat( $gouvernorat)
-    {
+
+   public function getGouvernorat()
+   {
+     return $this->gouvernorat;
+   }
+
+
+   public function setGouvernorat(Gouvernorat $gouvernorat)
+    {   
         $this->gouvernorat = $gouvernorat;
-
-    }
-
-    public function getGouvernorat()
-    {
-        return $this->gouvernorat;
     }
 }
 

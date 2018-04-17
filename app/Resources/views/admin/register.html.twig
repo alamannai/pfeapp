@@ -24,7 +24,13 @@
 
             <div class="form_group">
                 <div class="col-md-8 col-md-offset-2">
-                {{ form_row(form.gouvernorat, {'attr': {'class': 'form-control'}}) }}
+                    <select >
+                        {% for gouvernorat in gouvernorats %}
+                            <option value="{{ gouvernorat }}">{{ gouvernorat.nom }}</option>
+                        {% endfor %}
+                    </select>
+
+            
                 </div>
             </div>
 

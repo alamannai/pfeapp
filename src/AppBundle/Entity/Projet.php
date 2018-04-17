@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Projet
@@ -241,6 +242,14 @@ class Projet
     {
         return $this->done;
     }
+
+
+
+
+    /**
+     * @Assert\DateTime()
+     */
+     protected $createdAt;
       
 }
 

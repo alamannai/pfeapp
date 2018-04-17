@@ -2,12 +2,13 @@
 security:
     encoders:
         AppBundle\Entity\Citoyen: bcrypt
+        AppBundle\Entity\Commune: bcrypt
 
 
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_CITOYEN
-        ROLE_SUPER_ADMIN: ROLE_cOMMUNE
+        ROLE_UER:       ROLE_CITOYEN
+        ROLE_ADMIN:     ROLE_COMMUNE
 
     providers:
         fos_userbundle:
@@ -16,7 +17,14 @@ security:
             entity: { class: AppBundle:Commune, property: pseudo }
 
     firewalls: 
-        
+
+
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            anonymous: true 
+            
 
         login:
             pattern:    ^/api/login
@@ -26,6 +34,9 @@ security:
             guard:
                 authenticators:
                     - 'token_authenticator'
+
+
+        
             
      
                 
@@ -43,3 +54,4 @@ security:
                 target: /
  
 
+ 

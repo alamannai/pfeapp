@@ -13,6 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationCommuneController extends Controller
 {
+
+
+
+
+
+
+
     /**
      * @Route("/register", name="register")
      */
@@ -22,13 +29,18 @@ class RegistrationCommuneController extends Controller
         $pseudo=$request->request->get('pseudo');
         $gouvernorat=$request->request->get('gouvernorat');
 
+
+        $em = $this->getDoctrine()->getManager();
+        $governorats = $em->getRepository('AppBundle:Gouvernorat')->findall();
+
+
         
 
         // Create a new blank commune and process the form
         $commune = new Commune();
         $commune->setNom($nom);
         $commune->setPseudo($pseudo);
-        $commune->setGouvernorat($gouvernorat);
+        $commune->setGouvernorat($gouvernorats);
 
         
         $form = $this->createForm(CommuneType::class, $commune);

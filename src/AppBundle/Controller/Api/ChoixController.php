@@ -18,11 +18,6 @@ use Symfony\Component\Serializer\JsonSerializable;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-/**
- * 
- *
- * @Route("api/commune")
- */
 
 
 class ChoixController extends Controller
@@ -32,7 +27,7 @@ class ChoixController extends Controller
 
 
     /**
-     * @Route("/")
+     * @Route("api/gouvernorat/")
      * @Method("GET")
      */
     public function govlistAction(Request $request)
@@ -43,30 +38,16 @@ class ChoixController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
         
         $em = $this->getDoctrine()->getManager();
-        $gouvernorats = $em->getRepository('AppBundle:Commune')->findall();
+        $gouvernorats = $em->getRepository('AppBundle:Gouvernorat')->findall();
 
 
-        foreach ($gouvernorats as $gouvernorat) {
-            $govi= $gouvernorat->getGouvernorat();
-            $listi[]=$govi;
-        }
-        
-        $ng=$listi[0];
-        $listf[]=$ng;
-
-        for ($i=1; $i <count($gouvernorats) ; $i++) { 
-            if (!($ng==$listi[$i])) {
-                $listf[]=$listi[$i];
-            }
-            else{$ng=$listi[$i];
-            }
-        }
 
         $rep=array(
             'status' => true ,
-            'data' => $listf,
+            'data' => $gouvernorats,
             'msg '=>'les gouvernorats'
         );
+       
         
 
         $response = $serializer->serialize($rep, 'json');
@@ -77,12 +58,12 @@ class ChoixController extends Controller
     }
 
     /**
-     * @Route("/{gouvernorat}")
+     * @Route("api/commune/")
      * @Method("GET")
      */
-    public function listAction(Request $request ,$gouvernorat)
+    public function listAction(Request $request)
     {
-
+        $gouvernorat=$request->query->get('gouvernorat');
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
@@ -91,26 +72,19 @@ class ChoixController extends Controller
         $em = $this->getDoctrine()->getManager();
         $communes = $em->getRepository('AppBundle:Commune')->findBy(['gouvernorat'=>$gouvernorat]);
         
-        if (!empty($communes)) {
-            foreach ($communes as $commune  ) {
-               $listecommune[]=array(
-                'id'=> $commune->getId(),
-               'nom' => $commune->getNom()
-           );
-
-        }
-            $rep=array(
-                'status' => true ,
-                'data' => $listecommune,
-                'msg' => 'La liste des communes'
+        foreach ($communes as $commune) {
+            $c=array(
+                'id'=>$commune->getId(),
+                'nom'=>$commune->getNom()
             );
-        }else{
-            $rep=array(
+            $liste[]=$c;
+            
+        }
+        $rep=array(
                 'status' => false ,
-                'data' => '',
-                'msg' => 'Aucune commune'
+                'data' => $liste,
+                'msg' => 'Liste des communes'
             );
-        }
         
             
 
@@ -121,34 +95,6 @@ class ChoixController extends Controller
     
     }
 
-
-
-    /**
-     *
-     * @Route("/{id}")
-     * @Method("GET")
-     */
-    public function showAction($id)
-    {
-        $encoders = array(new XmlEncoder(), new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
-        $serializer = new Serializer($normalizers, $encoders);
-        
-        $em=$this->getDoctrine()->getManager();
-        $commune=$em->getRepository('AppBundle:Commune')->find($id);
-
-        $listecommune=array(
-                'id'=> $commune->getId(),
-               'nom' => $commune->getNom(),
-               'gouvernorat' =>$commune->getGouvernorat()
-           );
-        
-        $response = $serializer->serialize($listecommune, 'json');
-        return new Response($response);
-
-
-
-    }
 
 
 }

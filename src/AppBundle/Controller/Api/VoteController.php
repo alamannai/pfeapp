@@ -66,13 +66,13 @@ class VoteController extends Controller
 
                                             if (count($votes)==0) {
                                                 $rep=array( 
-                                               'status' => 'true',
+                                               'status' => true,
                                                 'data' => '',
                                                 'msg' => 'Aucune vote'
                                                 );
                                             }else{
                                                 $rep=array(
-                                            'status' => 'true',
+                                            'status' => true,
                                             'data' => $liste,
                                             'msg' => 'La liste de votes' 
                                             ); 
@@ -80,7 +80,7 @@ class VoteController extends Controller
 
                              }else{
                                  $rep=array(
-                                    'status' => 'false',
+                                    'status' => false,
                                     'data' => '',
                                     'msg' => 'Invalide Projet'
                                     ); 
@@ -91,9 +91,9 @@ class VoteController extends Controller
         }else{
            
             $rep=array(
-                                    'status ' => 'false' ,
-                                    'data ' => '',
-                                    'msg ' => 'Invalide Commune'
+                                    'status' => false ,
+                                    'data' => '',
+                                    'msg' => 'Invalide Commune'
 
                                     );
         }
@@ -122,6 +122,7 @@ class VoteController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
 
         $email=$request->request->get('email') ;
+
 
         $em = $this->getDoctrine()->getManager();
         $citoyen = $em->getRepository('AppBundle:Citoyen')->findOneBy([ 'email'=>$email]);
@@ -152,7 +153,7 @@ class VoteController extends Controller
  
         
         $em = $this->getDoctrine()->getManager();
-        $votecheck = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet , 'citoyen' => $citoyen_id]);
+        $votecheck = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet , 'citoyen' => $citoyen->getId()]);
 
         if (!$votecheck) {
 

@@ -6,29 +6,21 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use AppBundle\Form\GouvernoratType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class CommuneType extends AbstractType
+class GouvernoratType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', TextType::class)
-            ->add('gouvernorat', GouvernoratType::class)
-            ->add('pseudo', TextType::class)
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password'],
-            ]);
+            ->add('nom', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'AppBundle\Entity\Commune',
+            'data_class' => 'AppBundle\Entity\Gouvernorat',
         ]);
     }
 }

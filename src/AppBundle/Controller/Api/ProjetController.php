@@ -64,11 +64,11 @@ class ProjetController extends Controller
                         'id' =>$projet->getId(),
                         'sujet'=>$projet->getSujet(),
                         'contenu'=>$projet->getContenu(),
-                        'Date de debut'=>$projet->getDateDebut(),
+                        'datedebut'=>$projet->getDateDebut(),
                         'duree'=>$projet->getDuree(),
-                        'nombres de votes '=>$projet->getVotes(),
-                        'nombres de commentaires'=>$projet->getCommentaires(),
-                        'Etat'=>$msg
+                        'votes'=>$projet->getVotes(),
+                        'commentaires'=>$projet->getCommentaires(),
+                        'etat'=>$msg
                     );
 
                    
