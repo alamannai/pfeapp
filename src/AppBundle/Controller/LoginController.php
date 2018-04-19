@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use AppBundle\Entity\Citoyen;
+use AppBundle\Entity\Token;
 use AppBundle\Repository\citoyenRepository;
 use AppBundle\Form\CitoyenType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -70,12 +71,32 @@ class LoginController extends Controller
             'msg'=> 'verifier le mot de passe'
         );
         }else{
-            $token = $this->getToken($user);
-            $rep=array(
-            'status'=>true,
-            'data' => $token,
-            'msg'=> 'welcome'
-        );
+                    $em = $this->getDoctrine()->getManager();
+                    $checktoken = $em->getRepository('AppBundle:Token')->findOneBy(['citoyen' => $user->getId()]);
+                        if ($checktoken) {
+                            $token=$checktoken->getTokenfield();
+                        }else{
+                            $token = $this->getToken($user);
+                        
+                                $t= new token();
+                                $t->setTokenfield($token);
+                                $t->setCitoyen($user);
+                                
+
+                                $em=$this->getDoctrine()->getManager();
+                                $em->persist($t);
+                                $em->flush();
+
+                        }
+
+                        
+
+
+                        $rep=array(
+                        'status'=>true,
+                        'data' => $token,
+                        'msg'=> 'welcome'
+                    );
         }
 
         }

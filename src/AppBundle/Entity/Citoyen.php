@@ -40,6 +40,8 @@ class Citoyen extends BaseUser implements UserInterface
 
 
 
+
+
     /**
      * Set nom
      *
@@ -92,5 +94,4 @@ class Citoyen extends BaseUser implements UserInterface
     }
 
 
- 
 }

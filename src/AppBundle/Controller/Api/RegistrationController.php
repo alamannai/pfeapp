@@ -65,6 +65,7 @@ class RegistrationController extends Controller
         $citoyen->setPassword($password);
 
         $citoyen->setEnabled(true);
+ 
            
         $em = $this->getDoctrine()->getManager();
         $emailcheck = $em->getRepository('AppBundle:Citoyen')->findBy(['email' => $email]);

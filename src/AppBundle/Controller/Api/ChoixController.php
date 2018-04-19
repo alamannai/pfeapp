@@ -45,7 +45,7 @@ class ChoixController extends Controller
         $rep=array(
             'status' => true ,
             'data' => $gouvernorats,
-            'msg '=>'les gouvernorats'
+            'msg '=>'Liste des gouvernorats'
         );
        
         
@@ -63,28 +63,53 @@ class ChoixController extends Controller
      */
     public function listAction(Request $request)
     {
-        $gouvernorat=$request->query->get('gouvernorat');
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
-        
+
+        $gouvernorat=$request->query->get('gouvernorat');
         $em = $this->getDoctrine()->getManager();
-        $communes = $em->getRepository('AppBundle:Commune')->findBy(['gouvernorat'=>$gouvernorat]);
-        
-        foreach ($communes as $commune) {
-            $c=array(
-                'id'=>$commune->getId(),
-                'nom'=>$commune->getNom()
-            );
-            $liste[]=$c;
-            
+        $gov = $em->getRepository('AppBundle:Gouvernorat')->find($gouvernorat);
+
+        if ($gov) {
+            $em = $this->getDoctrine()->getManager();
+            $communes = $em->getRepository('AppBundle:Commune')->findBy(['gouvernorat'=>$gouvernorat]);
+
+            if ($communes) {
+               foreach ($communes as $commune) {
+                $c=array(
+                    'id'=>$commune->getId(),
+                    'nom'=>$commune->getNom()
+                );
+                $liste[]=$c;
+                
+            }
+            $rep=array(
+                    'status' => true ,
+                    'data' => $liste,
+                    'msg' => 'Liste des communes'
+                );
+            }else{
+                $rep=array(
+                    'status' => false ,
+                    'data' => '',
+                    'msg' => 'Aucune commune'
+                );
+            }
+        }else{
+            $rep=array(
+                    'status' => false ,
+                    'data' => '',
+                    'msg' => 'check'
+                );
         }
-        $rep=array(
-                'status' => false ,
-                'data' => $liste,
-                'msg' => 'Liste des communes'
-            );
+
+        
+        
+        
+        
+        
         
             
 
