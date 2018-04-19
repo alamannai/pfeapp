@@ -121,13 +121,21 @@ class VoteController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
 
-        $email=$request->request->get('email') ;
+        $token=$request->request->get('token') ;
 
+        if (!$token) {
+            $rep =array(
+              'status' => true,  
+              'data'=> '',
+             'msg' => 'Pas de connexion '
 
-        $em = $this->getDoctrine()->getManager();
-        $citoyen = $em->getRepository('AppBundle:Citoyen')->findOneBy([ 'email'=>$email]);
+             );
+        }else{
+            $em = $this->getDoctrine()->getManager();
+        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
 
-        
+        if ($log) {
+            $citoyen=$log->getCitoyen();
     
         $em = $this->getDoctrine()->getManager();
         $p = $em->getRepository('AppBundle:Projet')->find( $projet);
@@ -137,7 +145,7 @@ class VoteController extends Controller
         if ($p!=null) {
         $c=$p->getCommune();
         
-        $rep=null;
+        
         
 
         if ($c==$commune) {
@@ -160,10 +168,34 @@ class VoteController extends Controller
             $em->persist($vote);
             $em->flush();
 
-            $rep =true;
+            $rep =array(
+              'status' => true,  
+              'data'=> '',
+             'msg' => 'vote'
+
+             );     
+                }else{
+                    $rep =array(
+                          'status' => false,  
+                          'data'=> '',
+                         'msg' => 'deja voter'
+
+                         );
+                    }
+                }
+            }
+        }else{
+            $rep =array(
+                          'status' => false,  
+                          'data'=> '',
+                         'msg' => 'Invalide token'
+
+                         );
         }
-    }
-}
+        
+        }
+
+        
         
        
 

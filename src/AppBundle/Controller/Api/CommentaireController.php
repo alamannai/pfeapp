@@ -36,7 +36,7 @@ class CommentaireController extends Controller
     public function listAction(Request $request,$projet,$commune)
     {
 
-        $liste=null;
+     
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
@@ -69,14 +69,34 @@ class CommentaireController extends Controller
                     'commentaire'=>$commentaire->getContenu() ,
                     'Citoyen_id' => $commentaire->getCitoyen()->getId(),
                     'Citoyen'=> $np
-                );
+                      );
+                     }
+        
+                }
+                $rep =array(
+                      'status' => true,  
+                      'data'=> $liste,
+                     'msg' => 'liste des commentaires'
+
+                     );
+            }else{
+                $rep =array(
+                      'status' => true,  
+                      'data'=> '',
+                     'msg' => 'Invalide commune'
+
+                     );
             }
-        
+        }else{
+            $rep =array(
+                      'status' => true,  
+                      'data'=> '',
+                     'msg' => 'Invalid projet'
+
+                     );
         }
-    }
-}
         
-        $response = $serializer->serialize($liste, 'json');
+        $response = $serializer->serialize($rep, 'json');
          
         
         return new Response($response);
@@ -97,15 +117,17 @@ class CommentaireController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
 
 
-        $citoyen_id=$request->request->get('citoyen');
+        $token=$request->request->get('token') ;
         $contenu=$request->request->get('contenu');
-        
-    
-        $em = $this->getDoctrine()->getManager();
+
+        if ($token && $contenu) {
+            $em = $this->getDoctrine()->getManager();
         $p = $em->getRepository('AppBundle:Projet')->find( $projet);
 
         $emm = $this->getDoctrine()->getManager();
-        $citoyen = $emm->getRepository('AppBundle:Citoyen')->find($citoyen_id);
+        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+
+        $citoyen=$log->getCitoyen();
 
         if ($p!=null) {
         $c=$p->getCommune();
@@ -127,10 +149,26 @@ class CommentaireController extends Controller
         $em->persist($commentaire);
         $em->flush();
 
-            $rep =true;
+            $rep =array(
+              'status' => true,  
+              'data'=> '',
+             'msg' => 'commentaire cree'
+
+             );
         
          }
         }
+        }else{
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Invalide parametre'
+
+             );
+        }
+        
+    
+        
         
        
 
