@@ -93,5 +93,12 @@ class Citoyen extends BaseUser implements UserInterface
         return $this->prenom;
     }
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="Liste", mappedBy="Citoyen")
+     */
+    private $liste;
+    public function getListe()
+    {
+        return $this->liste;
+    }
 }

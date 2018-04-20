@@ -131,9 +131,7 @@ class CommentaireController extends Controller
 
         if ($p!=null) {
         $c=$p->getCommune();
-        
-        $rep=null;
-        
+
 
         if ($c==$commune) {
         $commentaire = new Commentaire();
@@ -156,8 +154,22 @@ class CommentaireController extends Controller
 
              );
         
-         }
-        }
+         }else{
+            $rep =array(
+                      'status' => false,  
+                      'data'=> '',
+                     'msg' => 'Invalide commune'
+
+                     );
+                }
+            }else{
+                $rep =array(
+                      'status' => false,  
+                      'data'=> '',
+                     'msg' => 'Invalid projet'
+
+                     );
+            }
         }else{
             $rep =array(
               'status' => false,  

@@ -4,7 +4,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use AppBundle\Form\CitoyenType;
 use AppBundle\Form\CommuneType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceTypeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

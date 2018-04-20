@@ -125,7 +125,7 @@ class VoteController extends Controller
 
         if (!$token) {
             $rep =array(
-              'status' => true,  
+              'status' => false,  
               'data'=> '',
              'msg' => 'Pas de connexion '
 
@@ -176,7 +176,7 @@ class VoteController extends Controller
              );     
                 }else{
                     $rep =array(
-                          'status' => false,  
+                          'status' => true,  
                           'data'=> '',
                          'msg' => 'deja voter'
 

@@ -74,7 +74,7 @@ class Token
      return $this->citoyen;
    }
 
-   public function setCitoyen(Citoyen $citoyen)
+   public function setCitoyen( $citoyen)
     {   
         $this->citoyen = $citoyen;
     }

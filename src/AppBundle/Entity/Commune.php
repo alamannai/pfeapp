@@ -180,10 +180,14 @@ class Commune implements UserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Liste", mappedBy="Citoyen")
+     * @ORM\OneToMany(targetEntity="Liste", mappedBy="Commune")
      */
     private $liste;
 
+    public function getListe()
+    {
+        return $this->liste;
+    }
 
 
 

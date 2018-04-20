@@ -135,3 +135,61 @@ nelmio_api_doc:
         request_format:
             formats:
                 json:       "application/json"
+
+twig:
+    exception_controller:  twig.controller.exception:showAction
+
+    form_themes:
+
+        # Default:
+        - form_div_layout.html.twig
+
+        # Bootstrap:
+        - bootstrap_3_layout.html.twig
+        - bootstrap_3_horizontal_layout.html.twig
+        - bootstrap_4_layout.html.twig
+        - bootstrap_4_horizontal_layout.html.twig
+
+        # Foundation
+        - foundation_5_layout.html.twig
+
+        # Example:
+        - form.html.twig
+
+    globals:
+
+        # Examples:
+        foo:                 '@bar'
+        pi:                  3.14
+
+        # Example options, but the easiest use is as seen above
+        some_variable_name:
+            # a service id that should be the value
+            id:                   ~
+            # set to service or leave blank
+            type:                 ~
+            value:                ~
+    autoescape:                ~
+
+    # See http://twig.sensiolabs.org/doc/recipes.html#using-the-template-name-to-set-the-default-escaping-strategy
+    autoescape_service:        ~ # Example: 'my_service'
+    autoescape_service_method: ~ # use in combination with autoescape_service option
+    base_template_class:       ~ # Example: Twig_Template
+    cache:                     '%kernel.cache_dir%/twig'
+    charset:                   '%kernel.charset%'
+    debug:                     '%kernel.debug%'
+    strict_variables:          ~
+    auto_reload:               ~
+    optimizations:             ~
+    default_path: '%kernel.project_dir%/templates'
+    paths:
+        '%kernel.project_dir%/vendor/acme/foo-bar/templates': foo_bar
+
+    date:
+        format: d.m.Y, H:i:s
+        interval_format: '%%d days'
+        timezone: Asia/Tokyo
+    number_format:
+        decimals: 2
+        decimal_point: ','
+        thousands_separator: '.'
