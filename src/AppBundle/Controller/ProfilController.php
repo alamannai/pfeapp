@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Citoyen;
+use AppBundle\Entity\Liste;
+use AppBundle\Entity\Token;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\JsonSerializable;
@@ -52,13 +54,33 @@ class ProfilController extends Controller
         }else{
             $em = $this->getDoctrine()->getManager();
             $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
-             if ($log) {
-            $citoyen=$log->getCitoyen();
+                if ($log) {
+                    $citoyen=$log->getCitoyen();
+
+           
+                        $em = $this->getDoctrine()->getManager();
+                            $abs = $em->getRepository('AppBundle:Liste')->findBy([ 'citoyen'=>$citoyen,'blocked'=>false]);
+                                    if ($abs) {
+                                       foreach ($abs as $ab ) {
+                                        $c=array(
+                                                'id'=>$ab->getCommune()->getId(),
+                                                'nom'=>$ab->getCommune()->getNom()
+                                            );
+                                            $liste[]=$c;
+                                    }
+                                    
+                            }
+
+            if (empty($liste)) {
+                $liste='Aucune commune';
+            }
+            
             $c=array(
                 'id'=>$citoyen->getId(),
                 'nom'=>$citoyen->getNom(),
                 'prenom'=>$citoyen->getPrenom(),
-                'email'=>$citoyen->getEmail()
+                'email'=>$citoyen->getEmail(),
+                'communes'=>$liste
             );
 
            $rep=array(
@@ -113,7 +135,10 @@ class ProfilController extends Controller
             if ($nom && $prenom && $email) {
                 $em = $this->getDoctrine()->getManager();
             $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
-                         if ($log) {
+
+            $em = $this->getDoctrine()->getManager();
+            $mail = $em->getRepository('AppBundle:Citoyen')->findOneBy([ 'email'=>$email]);
+                         if ($log && !$mail) {
                         $citoyen=$log->getCitoyen();
 
                         $citoyen->setNom($nom);
@@ -134,7 +159,7 @@ class ProfilController extends Controller
                         $rep =array(
                                       'status' => false,  
                                       'data'=> '',
-                                     'msg' => 'Invalide token'
+                                     'msg' => 'check token et email'
 
                                      );
                         }
