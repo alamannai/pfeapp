@@ -163,7 +163,9 @@ class VoteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $votecheck = $em->getRepository('AppBundle:Vote')->findBy(['projet' => $projet , 'citoyen' => $citoyen->getId()]);
 
-        if (!$votecheck) {
+        $donep=$p->getDone();
+
+        if (!$votecheck && $donep != true ) {
 
             $em->persist($vote);
             $em->flush();
@@ -178,7 +180,7 @@ class VoteController extends Controller
                     $rep =array(
                           'status' => true,  
                           'data'=> '',
-                         'msg' => 'deja voter'
+                         'msg' => 'pas de vote'
 
                          );
                     }

@@ -191,7 +191,7 @@ class ProfilController extends Controller
      * @Method("DELETE")
      */
 
-    public function deleteProjet(Request $request,$id)
+    public function deleteProfil(Request $request,$id)
     {
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
