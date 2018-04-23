@@ -46,7 +46,7 @@ class ProfilController extends Controller
 
         if (!$token) {
             $rep =array(
-              'status' => true,  
+              'status' => false,  
               'data'=> '',
              'msg' => 'Pas de connexion '
 
@@ -126,7 +126,7 @@ class ProfilController extends Controller
 
         if (!$token) {
             $rep =array(
-              'status' => true,  
+              'status' => false,  
               'data'=> '',
              'msg' => 'Pas de connexion '
 
@@ -293,4 +293,107 @@ class ProfilController extends Controller
 
 
     }
+
+
+
+
+
+    /**
+     *
+     * @Route("/password/update")
+     * @Method("POST")
+     */
+
+
+
+    public function updatePassAction(Request $request)
+    {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $token=$request->request->get('token');
+        $old=$request->request->get('old');
+        $new=$request->request->get('new');
+    
+
+        if (!$token) {
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Pas de connexion '
+
+             );
+        }else{
+            if ($old && $new ) {
+                $em = $this->getDoctrine()->getManager();
+            $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+
+          
+            
+                         if ($log) {
+                          $citoyen=$log->getCitoyen();
+
+                          $encoder = $this->get('security.password_encoder');
+                          $isValid=$encoder->isPasswordValid(
+                          $citoyen, 
+                          $old,      
+                          $citoyen->getSalt()
+                      );
+                           if (!$isValid) {
+         
+            
+                                  $rep=array(
+                                  'status'=>false,
+                                  'data' => '',
+                                  'msg'=> 'verifier le mot de passe'
+                                 );
+                              }else{
+                                $citoyen->setPlainPassword($new);
+
+                                
+                         
+                                $encoder = $this->get('security.password_encoder');
+                                $password = $encoder->encodePassword($citoyen, $citoyen->getPlainPassword());
+
+                                    
+
+                                $citoyen->setPassword($password);
+
+                                  $em=$this->getDoctrine()->getManager();
+                                  $em->persist($citoyen);
+                                  $em->flush();
+
+                                 $rep=array(
+                                  'status'=> true,
+                                  'data'=>'',
+                                  'msg'=> 'Mot de passe modifie'
+                                 );
+                              }
+                        
+                        }else{
+                        $rep =array(
+                                      'status' => false,  
+                                      'data'=> '',
+                                     'msg' => 'check token et mot de passe'
+
+                                     );
+                        }
+            }else{
+                $rep =array(
+                                      'status' => false,  
+                                      'data'=> '',
+                                     'msg' => 'Invalid parametres'
+
+                                     );
+            }
+            
+        }
+        
+        
+        
+        $response = $serializer->serialize($rep, 'json');
+        return new Response($response);
+    }
+
 }

@@ -178,11 +178,7 @@ class CommentaireController extends Controller
 
              );
         }
-        
-    
-        
-        
-       
+          
 
 
            
@@ -193,6 +189,105 @@ class CommentaireController extends Controller
     }
 
 
+
+
+
+    /**
+     * @Route("/{id}")
+     * @Method("DELETE")
+     */
+
+    public function deleteCommetaire(Request $request,$id)
+    {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $token=$request->headers->get('token');
+
+        if (!$token) {
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Pas de connexion '
+
+             );
+        }else{
+         $em = $this->getDoctrine()->getManager();
+        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+
+        if (!$log) {
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Invalide token '
+
+             );
+        }else{
+
+                    $em = $this->getDoctrine()->getManager();
+                $c = $em->getRepository('AppBundle:Commentaire')->find($id);
+
+                if (!$c) {
+                    $rep =array(
+                    'status' => false,  
+                      'data'=> '',
+                     'msg' => 'Invalide commentaire '
+
+                     );
+                }else{
+                     
+                        
+                        if ($c ->getCitoyen()->getId() == $log->getCitoyen()->getId()) {
+                            $em=$this->getDoctrine()->getManager();
+                                $em->remove($c);
+                                $em->flush();
+
+                                $rep =array(
+                                    'status' => true,  
+                                      'data'=> '',
+                                     'msg' => 'commentaire supprimee '
+
+                                     );
+                        }else{
+                            $rep =array(
+                                'status' => false,  
+                                  'data'=> '',
+                                 'msg' => 'non autorisee '
+
+                                 );
+                        }
+
+                       
+                        
+                        
+
+                        
+
+                        
+
+                        }
+                        
+                        
+                        
+                    
+
+                        
+                        
+                        
+
+                }
+
+       
+        }
+
+        $response = $serializer->serialize($rep, 'json');
+        return new Response($response);
+
+
+
+    }
 
 
 }
