@@ -137,17 +137,40 @@ class ChoixController extends Controller
                    
                         }
         
-    }elseif ($token && is_numeric($gov)) {
-        $em = $this->getDoctrine()->getManager();
+    }elseif ($token && $gov) {
+
+            $em = $this->getDoctrine()->getManager();
+            $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+
+            $idc=$log->getCitoyen()->getId();
+
+            $em = $this->getDoctrine()->getManager();
             $communes = $em->getRepository('AppBundle:Commune')->findBy(['gouvernorat'=>$gouvernorat]);
+
+            
+            $val=false;
 
             if ($communes) {
                foreach ($communes as $commune) {
-                $c=array(
+                $em = $this->getDoctrine()->getManager();
+                $blocked = $em->getRepository('AppBundle:Liste')->findOneBy([ 'citoyen'=>$idc, 'blocked'=> true,'commune'=>$commune]);
+
+                    if ($blocked) {
+                        $val=true;
+                    }else{
+                            $c=array(
                     'id'=>$commune->getId(),
                     'nom'=>$commune->getNom()
-                );
-                $liste[]=$c;
+                        );
+
+                        
+                        $liste[]=$c;
+                    }
+
+                    
+                
+                
+                
                 
             }
             $rep=array(
