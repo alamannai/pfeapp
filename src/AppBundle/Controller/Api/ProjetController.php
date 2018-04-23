@@ -149,6 +149,12 @@ class ProjetController extends Controller
                             $msg='Projet termine';
                     }
                 }
+
+                if ($projet->getImage()) {
+                    $img=$projet->getImage()->getImage();
+                }else{
+                    $img="aucun image" ;
+                }
                     $li=array(
                         'id' =>$projet->getId(),
                         'sujet'=>$projet->getSujet(),
@@ -157,7 +163,8 @@ class ProjetController extends Controller
                         'duree'=>$projet->getDuree(),
                         'nombres de votes '=>$projet->getVotes(),
                         'nombres de commentaires'=>$projet->getCommentaires(),
-                        'Etat'=>$msg
+                        'Etat'=>$msg,
+                        'image'=>$img
                     );
 
             $listepro= array(

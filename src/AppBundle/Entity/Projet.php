@@ -250,6 +250,23 @@ class Projet
      * @Assert\DateTime()
      */
      protected $createdAt;
+
+
+
+     /**
+     * @ORM\OneToOne(targetEntity="imageProjet", cascade={"persist"})
+     */
+    private $image;
+
+      public function getImage()
+   {
+     return $this->image;
+   }
+
+   public function setImage( $image)
+    {   
+        $this->image = $image;
+    }
       
 }
 
