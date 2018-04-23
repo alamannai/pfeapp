@@ -32,8 +32,6 @@ class ProjetController extends Controller
      */
     public function listAction(Request $request,$commune)
     {
-        $em = $this->getDoctrine()->getManager();
-        $commune = $em->getRepository('AppBundle:Commune')->find( $commune);
 
         $encoders = array( new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
@@ -75,9 +73,9 @@ class ProjetController extends Controller
                 }
 
                 $listepro= array(
-                    'status ' => true ,
-                    'data ' => $list,
-                    'msg ' => ' La liste des projets'
+                    'status' => true ,
+                    'data' => $list,
+                    'msg' => ' La liste des projets'
 
 
                 );
@@ -85,18 +83,18 @@ class ProjetController extends Controller
             
             }else{
             $listepro=array(
-                'status ' => true ,
-                'data ' => '',
-                'msg ' => 'Aucun projet'
+                'status' => true ,
+                'data' => '',
+                'msg' => 'Aucun projet'
 
                 );
         }
 
         }else{
             $listepro=array(
-                'status ' => false ,
-                'data ' => '',
-                'msg ' => 'Invalide Commune'
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Invalide Commune'
 
                 );
         }
@@ -118,9 +116,6 @@ class ProjetController extends Controller
      */
     public function showProjet($id,Request $request,$commune)
     {
-        $em = $this->getDoctrine()->getManager();
-        $commune = $em->getRepository('AppBundle:Commune')->find( $commune);
-
 
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
@@ -153,32 +148,32 @@ class ProjetController extends Controller
                 if ($projet->getImage()) {
                     $img=$projet->getImage()->getImage();
                 }else{
-                    $img="aucun image" ;
+                    $img="aucune image" ;
                 }
                     $li=array(
                         'id' =>$projet->getId(),
                         'sujet'=>$projet->getSujet(),
                         'contenu'=>$projet->getContenu(),
-                        'Date de debut'=>$projet->getDateDebut(),
+                        'datedebut'=>$projet->getDateDebut(),
                         'duree'=>$projet->getDuree(),
-                        'nombres de votes '=>$projet->getVotes(),
-                        'nombres de commentaires'=>$projet->getCommentaires(),
+                        'votes'=>$projet->getVotes(),
+                        'commentaires'=>$projet->getCommentaires(),
                         'Etat'=>$msg,
                         'image'=>$img
                     );
 
             $listepro= array(
-                    'status ' => true ,
-                    'data ' => $li,
-                    'msg ' => ' Le projet'
+                    'status' => true ,
+                    'data' => $li,
+                    'msg' => ' Le projet'
 
 
                 );
         }else{
             $listepro=array(
-                'status ' => false ,
-                'data ' => '',
-                'msg ' => 'Aucun projet'
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Aucun projet'
 
                 );
         }
@@ -186,9 +181,9 @@ class ProjetController extends Controller
         }
         else{
            $listepro= array(
-                'status ' => false ,
-                'data ' => '',
-                'msg ' => 'Aucune Commune'
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Aucune Commune'
 
                 );
         }

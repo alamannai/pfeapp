@@ -225,4 +225,81 @@ class abonnerController extends Controller
 
 
 
+
+    /**
+     * @Route("/delete/{commune}")
+     * @Method("DELETE")
+     */
+
+    public function deleteCommune(Request $request,$commune)
+    {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $token=$request->headers->get('token');
+
+        if (!$token) {
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Pas de connexion '
+
+             );
+        }else{
+                                 $em = $this->getDoctrine()->getManager();
+                                $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+                                $citoyen=$log->getCitoyen();
+
+                                 $em = $this->getDoctrine()->getManager();
+                                $c = $em->getRepository('AppBundle:Commune')->find($commune);
+
+                                                if (!$log) {
+                                                    $rep =array(
+                                                      'status' => false,  
+                                                      'data'=> '',
+                                                     'msg' => 'Invalide token '
+
+                                                     );
+                                                }else{
+
+                                                          
+                                                          $em = $this->getDoctrine()->getManager();
+                                                          $ab = $em->getRepository('AppBundle:Liste')->findOneBy([ 'citoyen'=>$citoyen,'blocked'=>false ,'commune'=> $c]);
+
+                                                                        if (!$ab) {
+                                                                            $rep =array(
+                                                                            'status' => false,  
+                                                                              'data'=> '',
+                                                                             'msg' => 'Invalide abonnement '
+
+                                                                             );
+                                                                        }else{
+                                                                             
+
+                                                                                
+
+                                                                                $em=$this->getDoctrine()->getManager();
+                                                                                $em->remove($ab);
+                                                                                $em->flush();
+
+                                                                                $rep=array(
+                                                                                    'status'=> true,
+                                                                                    'data'=>'',
+                                                                                    'msg'=>'Desabonner'
+                                                                                    );
+                                                                        }
+
+                                                }
+        }
+
+        $response = $serializer->serialize($rep, 'json');
+        return new Response($response);
+
+
+
+    
 }
+}
+

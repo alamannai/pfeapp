@@ -7,7 +7,7 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    image_directory : '%kernel.project_dir%/web/uploads/images'
+    image_directory : '%kernel.project_dir%/web/uploads/imageProjet'
 
 framework:
     serializer:

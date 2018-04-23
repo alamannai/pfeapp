@@ -85,9 +85,9 @@ class SondageController extends Controller
             );
 
                 $listepro= array(
-                    'status ' => true ,
-                    'data ' => $list,
-                    'msg ' => ' La liste des sondages'
+                    'status' => true ,
+                    'data' => $list,
+                    'msg' => ' La liste des sondages'
 
 
                 );
@@ -95,18 +95,18 @@ class SondageController extends Controller
             
             }else{
             $listepro=array(
-                'status ' => true ,
-                'data ' => '',
-                'msg ' => 'Aucun sondage'
+                'status' => true ,
+                'data' => '',
+                'msg' => 'Aucun sondage'
 
                 );
         }
 
         }else{
             $listepro=array(
-                'status ' => false ,
-                'data ' => '',
-                'msg ' => 'Invalide Commune'
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Invalide Commune'
 
                 );
         }
@@ -174,9 +174,9 @@ class SondageController extends Controller
             
 
                 $listepro= array(
-                    'status ' => true ,
-                    'data ' => $onesondage,
-                    'msg ' => ' La liste des sondages'
+                    'status' => true ,
+                    'data' => $onesondage,
+                    'msg' => 'Sondage'
 
 
                 );
@@ -184,9 +184,9 @@ class SondageController extends Controller
             
             }else{
             $listepro=array(
-                'status ' => true ,
-                'data ' => '',
-                'msg ' => 'Aucun sondage'
+                'status' => true ,
+                'data' => '',
+                'msg' => 'Aucun sondage'
 
                 );
         }
@@ -194,9 +194,9 @@ class SondageController extends Controller
         }
         else{
            $listepro= array(
-                'status ' => false ,
-                'data ' => '',
-                'msg ' => 'Aucune Commune'
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Aucune Commune'
 
                 );
         }
