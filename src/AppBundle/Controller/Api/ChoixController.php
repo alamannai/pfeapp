@@ -99,7 +99,7 @@ class ChoixController extends Controller
                     'msg' => 'Aucune commune'
                 );
             }
-        }elseif ($token && $gov==''){
+        }elseif ($token && empty($gov)){
             
 
             $em = $this->getDoctrine()->getManager();
@@ -132,7 +132,7 @@ class ChoixController extends Controller
                             $rep=array(
                                 'status' => false ,
                                 'data' => $gouvernorats,
-                                'msg '=>'Liste des gouvernorats'
+                                'msg'=>'Liste des gouvernorats'
                             );
                    
                         }

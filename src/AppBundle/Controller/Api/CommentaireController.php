@@ -56,6 +56,7 @@ class CommentaireController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $commentaires = $em->getRepository('AppBundle:Commentaire')->findBy(['projet' => $projet]);
+        $liste='';
 
         foreach ($commentaires as $commentaire ) {
 
