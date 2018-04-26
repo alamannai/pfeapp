@@ -138,7 +138,7 @@ class ProfilController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $mail = $em->getRepository('AppBundle:Citoyen')->findOneBy([ 'email'=>$email]);
-                         if ($log && !$mail) {
+                         if ($log && $mail->getId()==$log->getCitoyen()->getId()) {
                         $citoyen=$log->getCitoyen();
 
                         $citoyen->setNom($nom);
@@ -159,7 +159,7 @@ class ProfilController extends Controller
                         $rep =array(
                                       'status' => false,  
                                       'data'=> '',
-                                     'msg' => 'check token et email'
+                                     'msg' => 'check token ou email'
 
                                      );
                         }
