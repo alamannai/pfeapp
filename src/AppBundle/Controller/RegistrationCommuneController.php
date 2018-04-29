@@ -27,7 +27,7 @@ class RegistrationCommuneController extends Controller
     {   
         $nom=$request->request->get('nom');
         $pseudo=$request->request->get('pseudo');
-        $gouvernorat=$request->request->get('gouvernorat');
+
 
 
         $em = $this->getDoctrine()->getManager();
@@ -40,7 +40,7 @@ class RegistrationCommuneController extends Controller
         $commune = new Commune();
         $commune->setNom($nom);
         $commune->setPseudo($pseudo);
-        $commune->setGouvernorat($gouvernorats);
+
 
         
         $form = $this->createForm(CommuneType::class, $commune);
@@ -67,6 +67,7 @@ class RegistrationCommuneController extends Controller
 
         return $this->render('admin/register.html.twig', [
             'form' => $form->createView(),
+            'gouvernorats'=> $governorats,
 
         ]);
     }

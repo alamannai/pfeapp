@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle()
 
         ];
 

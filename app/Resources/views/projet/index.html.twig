@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+<div class="col-sm-12">
+      <div class="well">
+        <h1 >Liste des projets <a href="{{ path('projet_new') }}" class="btn btn-primary col-3">Nouveau projet</a> </h1>
+        <br>
+                    <div class="table-responsive">
+        <table class="table table-hover">
+
+            <thead >
+            <tr class="alert alert-info" >
+                <th >Id</th>
+                <th >Sujet</th>
+                <th >Datedebut</th>
+                <th >Duree</th>
+                <th >Terminé</th>
+                <th >Actions</th>
+            </tr>
+    </thead>
+
+        
+        <tbody >
+        {% for projet in projets %}
+            <tr class="alert alert-info" >
+                <td ><a href="{{ path('projet_show', { 'id': projet.id }) }}">{{ projet.id }}</a></td>
+                <td >{{ projet.sujet }}</td>
+                <td >{% if projet.dateDebut %}{{ projet.dateDebut|date('Y-m-d') }}{% endif %}</td>
+                <td >{{ projet.duree }}</td>
+                <td >{% if projet.done %}Oui{% else %}Non{% endif %}</td>
+                <td >
+                            <a href="{{ path('projet_show', { 'id': projet.id }) }}" class="btn btn-info">show</a>
+                        
+                            <a href="{{ path('projet_edit', { 'id': projet.id }) }}" class="btn btn-success">edit</a>
+                      
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+    
+
+     </div> 
+ 
+
+    
+
+   
+            
+        </div>
+     </div>
+
+
+{% endblock %}

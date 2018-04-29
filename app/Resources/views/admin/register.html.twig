@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'default/index.html.twig' %}
 
 
 
@@ -24,9 +24,10 @@
 
             <div class="form_group">
                 <div class="col-md-8 col-md-offset-2">
-                    <select >
+                    <label>Gouvernorat</label>
+                    <select  class="form-control">
                         {% for gouvernorat in gouvernorats %}
-                            <option value="{{ gouvernorat }}">{{ gouvernorat.nom }}</option>
+                            <option value="{{ gouvernorat.id }}">{{ gouvernorat.nom }}</option>
                         {% endfor %}
                     </select>
 

@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * Projet
  *
@@ -30,9 +31,9 @@ class Projet
     private $sujet;
 
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="contenu", type="string", length=255)
+     * @ORM\Column(name="contenu", type="text", length=4000)
      */
     private $contenu;
 
@@ -170,7 +171,7 @@ class Projet
  
     public function getVotes()
     {
-        return count($this->votes);
+        return $this->votes;
     }
 
     /**
@@ -192,6 +193,12 @@ class Projet
         }
     }
     return $c;
+}
+
+public function getAllommentaires()
+    {
+       
+    return $this->commentaires;
 }
 
 
@@ -253,19 +260,23 @@ class Projet
 
 
 
-     /**
-     * @ORM\OneToOne(targetEntity="imageProjet", cascade={"persist"})
+  /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload ")
      */
     private $image;
 
-      public function getImage()
-   {
-     return $this->image;
-   }
+    public function getImage()
+    {
+        return $this->image;
+    }
 
-   public function setImage( $image)
-    {   
+    public function setImage($image)
+    {
         $this->image = $image;
+
+        return $this;
     }
       
 }

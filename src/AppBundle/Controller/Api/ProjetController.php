@@ -64,7 +64,7 @@ class ProjetController extends Controller
                         'contenu'=>$projet->getContenu(),
                         'datedebut'=>$projet->getDateDebut(),
                         'duree'=>$projet->getDuree(),
-                        'votes'=>$projet->getVotes(),
+                        'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
                         'etat'=>$msg
                     );
@@ -146,7 +146,7 @@ class ProjetController extends Controller
                 }
 
                 if ($projet->getImage()) {
-                    $img=$projet->getImage()->getImage();
+                    $img=$projet->getImage();
                 }else{
                     $img="aucune image" ;
                 }
@@ -156,7 +156,7 @@ class ProjetController extends Controller
                         'contenu'=>$projet->getContenu(),
                         'datedebut'=>$projet->getDateDebut(),
                         'duree'=>$projet->getDuree(),
-                        'votes'=>$projet->getVotes(),
+                        'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
                         'Etat'=>$msg,
                         'image'=>$img

@@ -22,14 +22,24 @@ class imageProjet
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string" )
-     *
-     * @Assert\NotBlank(message="an image")
-     * @Assert\Image()
-     */
+    /*
+    *@var string
+    *
+    *@ORM\column(name="image",type="string",length="255",nullable="true")
+    */
 
     private $image;
+
+
+
+    /*
+    *@var file
+    *
+    *
+    *@UploadableField(name="imagefile", path="uploads/imageProjet")
+    */
+
+    private $imagefile;
 
 
     /**
@@ -42,7 +52,7 @@ class imageProjet
         return $this->id;
     }
 
-   public function setImage(File $image )
+   public function setImage( $image )
     {
         $this->image = $image;
     }
