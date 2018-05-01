@@ -101,4 +101,14 @@ class Citoyen extends BaseUser implements UserInterface
     {
         return $this->liste;
     }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reclamation", mappedBy="Citoyen")
+     */
+    private $reclamation;
+    
+    public function getReclamation()
+    {
+        return $this->liste;
+    }
 }
