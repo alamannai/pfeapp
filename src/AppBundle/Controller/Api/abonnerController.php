@@ -131,7 +131,7 @@ class abonnerController extends Controller
                     $abs = $em->getRepository('AppBundle:Liste')->findBy([ 'citoyen'=>$idc, 'blocked'=> false]);
 
                     $em = $this->getDoctrine()->getManager();
-                    $abcomm = $em->getRepository('AppBundle:Liste')->findOneBy(['commune'=> $commune]);
+                    $abcomm = $em->getRepository('AppBundle:Liste')->findOneBy(['commune'=> $commune,'citoyen'=>$idc]);
 
                         $val=true;
                         $blok=false;
