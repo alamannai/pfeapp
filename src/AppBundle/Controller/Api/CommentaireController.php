@@ -126,7 +126,7 @@ class CommentaireController extends Controller
         $p = $em->getRepository('AppBundle:Projet')->find( $projet);
 
         $emm = $this->getDoctrine()->getManager();
-        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+        $log = $emm->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
 
         $citoyen=$log->getCitoyen();
 
@@ -145,8 +145,8 @@ class CommentaireController extends Controller
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
-        $em->persist($commentaire);
-        $em->flush();
+        $emm->persist($commentaire);
+        $emm->flush();
 
             $rep =array(
               'status' => true,  

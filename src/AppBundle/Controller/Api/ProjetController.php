@@ -66,7 +66,8 @@ class ProjetController extends Controller
                         'duree'=>$projet->getDuree(),
                         'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
-                        'etat'=>$msg
+                        'etat'=>$msg,
+                        
                     );
 
                    
@@ -159,7 +160,7 @@ class ProjetController extends Controller
                         'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
                         'Etat'=>$msg,
-                        'image'=>$img
+                        'image'=> 'http://localhost/pfeapp/web/uploads/imageProjet/'.$projet->getImage()
                     );
 
             $listepro= array(

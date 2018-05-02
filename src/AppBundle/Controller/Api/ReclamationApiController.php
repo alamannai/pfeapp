@@ -67,7 +67,7 @@ class ReclamationApiController extends Controller
                             $reclamation->setContenu($contenu);
                             $reclamation->setCommune($comm);
                             $reclamation->setCitoyen($citoyen);
-                            $reclamation->setClosed(false);
+                            $reclamation->setClosed(null);
 
                             if ((!empty($request->request->get('lat')) && !empty($request->request->get('lng'))) ) {
                                        $lat=$request->request->get('lat');
@@ -123,5 +123,256 @@ class ReclamationApiController extends Controller
 
   }
 
+
+
+
+
+
+  /**
+     * @Route("/")
+     * @Method("GET")
+     */
+    public function listAction(Request $request)
+    {
+
+        $encoders = array( new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $token=$request->query->get('token') ;
+        
+        if ($token){
+        $em = $this->getDoctrine()->getManager();
+        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+        $citoyen=$log->getCitoyen();
+
+        $emm = $this->getDoctrine()->getManager();
+        $recs = $emm->getRepository('AppBundle:Reclamation')->findBy([ 'citoyen'=>$citoyen->getId()]);
+                  if ($recs) {
+                     foreach ($recs as $rec ) {
+
+                                if ($rec->getClosed()== true) {
+                                  $et='resolue';
+                                }elseif($rec->getClosed()== false){
+                                  $et='En traitement';
+                                }else{
+                                  $et='En attente';
+                                }
+
+                        $liste[]=array(
+                          'id'=>$rec->getId(),
+                          'contenu'=>$rec->getContenu(),
+                          'etat'=> $et,
+                          'image'=> 'http://localhost/pfeapp/web/uploads/imageReclamation/'.$rec->getImage(),
+                          'lat'=> $rec->getLat(),
+                          'lng'=>$rec->getLng()
+                        );
+                      }
+                      $rep=array(
+                          'status'=>true,
+                          'data'=> $liste,
+                          'msg'=>'Vos reclamations'
+                      );
+                  }else{
+                    $rep=array(
+                          'status'=>true,
+                          'data'=> '',
+                          'msg'=>'Aucune reclamation'
+                      );
+                  }
+           
+        
+
+        }else{
+            $rep=array(
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Pas de connexion'
+
+                );
+        }
+
+        
+
+        $response = $serializer->serialize($rep, 'json');
+         
+        
+        return new Response($response);
+    
+    }
+
+
+
+  /**
+     * @Route("/{id}")
+     * @Method("GET")
+     */
+    public function showAction(Request $request,$id)
+    {
+
+        $encoders = array( new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $token=$request->query->get('token') ;
+        
+        if ($token){
+        $em = $this->getDoctrine()->getManager();
+        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+        $citoyen=$log->getCitoyen();
+
+        $emm = $this->getDoctrine()->getManager();
+        $rec = $emm->getRepository('AppBundle:Reclamation')->find($id);
+                  if ($rec) {
+                    
+
+                                if ($rec->getClosed()== true) {
+                                  $et='resolue';
+                                }elseif($rec->getClosed()== false){
+                                  $et='En traitement';
+                                }else{
+                                  $et='En attente';
+                                }
+
+                        $liste[]=array(
+                          'id'=>$rec->getId(),
+                          'contenu'=>$rec->getContenu(),
+                          'etat'=> $et,
+                          'image'=> 'http://localhost/pfeapp/web/uploads/imageReclamation/'.$rec->getImage(),
+                          'lat'=> $rec->getLat(),
+                          'lng'=>$rec->getLng()
+                        );
+                      
+                      $rep=array(
+                          'status'=>true,
+                          'data'=> $liste,
+                          'msg'=>'Votre reclamation'
+                      );
+                  }else{
+                    $rep=array(
+                          'status'=>true,
+                          'data'=> '',
+                          'msg'=>'Invalide reclamation'
+                      );
+                  }
+           
+        
+
+        }else{
+            $rep=array(
+                'status' => false ,
+                'data' => '',
+                'msg' => 'Pas de connexion'
+
+                );
+        }
+
+        
+
+        $response = $serializer->serialize($rep, 'json');
+         
+        
+        return new Response($response);
+    
+    }
+
+
+
+    /**
+     * @Route("/{id}")
+     * @Method("DELETE")
+     */
+
+    public function deleteRec(Request $request,$id)
+    {
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+        $token=$request->headers->get('token');
+
+        if (!$token) {
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Pas de connexion '
+
+             );
+        }else{
+         $em = $this->getDoctrine()->getManager();
+        $log = $em->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+
+        if (!$log) {
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Invalide token '
+
+             );
+        }else{
+
+                    $em = $this->getDoctrine()->getManager();
+                $c = $em->getRepository('AppBundle:Reclamation')->findOneBy(['id'=>$id, 'closed'=>null]);
+
+                if (!$c) {
+                    $rep =array(
+                    'status' => false,  
+                      'data'=> '',
+                     'msg' => 'Invalide reclamation '
+
+                     );
+                }else{
+                     
+                        
+                        if ($c ->getCitoyen()->getId() == $log->getCitoyen()->getId()) {
+                            $em=$this->getDoctrine()->getManager();
+                                $em->remove($c);
+                                $em->flush();
+
+                                $rep =array(
+                                    'status' => true,  
+                                      'data'=> '',
+                                     'msg' => 'reclamation supprimee '
+
+                                     );
+                        }else{
+                            $rep =array(
+                                'status' => false,  
+                                  'data'=> '',
+                                 'msg' => 'non autorisee '
+
+                                 );
+                        }
+
+                       
+                        
+                        
+
+                        
+
+                        
+
+                        }
+                        
+                        
+                        
+                    
+
+                        
+                        
+                        
+
+                }
+
+       
+        }
+
+        $response = $serializer->serialize($rep, 'json');
+        return new Response($response);
+
+
+
+    }
 }
 

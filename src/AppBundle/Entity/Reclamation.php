@@ -61,7 +61,7 @@ class Reclamation
     /**
      * @var bool
      *
-     * @ORM\Column(name="closed", type="boolean")
+     * @ORM\Column(name="closed", type="boolean" , nullable=true)
      */
     private $closed;
 
