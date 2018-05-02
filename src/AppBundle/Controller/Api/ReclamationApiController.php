@@ -151,12 +151,13 @@ class ReclamationApiController extends Controller
                   if ($recs) {
                      foreach ($recs as $rec ) {
 
-                                if ($rec->getClosed()== true) {
+                                if ($rec->getClosed()=== true) {
                                   $et='resolue';
-                                }elseif($rec->getClosed()== false){
-                                  $et='En traitement';
-                                }else{
+                                }elseif($rec->getClosed()=== null){
                                   $et='En attente';
+                                }else{
+                                  
+                                  $et='En traitement';
                                 }
 
                         $liste[]=array(
@@ -228,10 +229,11 @@ class ReclamationApiController extends Controller
 
                                 if ($rec->getClosed()== true) {
                                   $et='resolue';
-                                }elseif($rec->getClosed()== false){
-                                  $et='En traitement';
-                                }else{
+                                }elseif($rec->getClosed()== null){
                                   $et='En attente';
+                                }else{
+                                  
+                                  $et='En traitement';
                                 }
 
                         $liste[]=array(
