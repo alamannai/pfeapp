@@ -23,9 +23,9 @@ class ReclamationType extends AbstractType
         $builder
         ->add('contenu', TextareaType::class)
         ->add('createdAt', DateType::class)
-        ->add('verticale', IntegerType::class)
+        ->add('lng', IntegerType::class)
         ->add('closed', ChoiceType::class)
-        ->add('horizentale', IntegerType::class)
+        ->add('lat', IntegerType::class)
         ->add('image', FileType::class, [ 
             'data_class' => null
         ]);

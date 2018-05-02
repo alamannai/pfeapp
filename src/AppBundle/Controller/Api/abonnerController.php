@@ -43,7 +43,7 @@ class abonnerController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
 
-        $token=$request->query->get('token');
+        $token=$request->request->get('token');
         
         if ($token) {
 

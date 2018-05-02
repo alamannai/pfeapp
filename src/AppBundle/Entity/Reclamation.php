@@ -39,16 +39,16 @@ class Reclamation
     /**
      * @var int
      *
-     * @ORM\Column(name="horizontale", type="integer", nullable=true)
+     * @ORM\Column(name="lat", type="integer", nullable=true)
      */
-    private $horizontale;
+    private $lat;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="verticale", type="integer", nullable=true)
+     * @ORM\Column(name="lng", type="integer", nullable=true)
      */
-    private $verticale;
+    private $lng;
 
     /**
      * @var string
@@ -125,51 +125,51 @@ class Reclamation
     }
 
     /**
-     * Set horizontale
+     * Set lat
      *
-     * @param integer $horizontale
+     * @param integer $lat
      *
      * @return Reclamation
      */
-    public function setHorizontale($horizontale)
+    public function setLat($lat)
     {
-        $this->horizontale = $horizontale;
+        $this->lat = $lat;
 
         return $this;
     }
 
     /**
-     * Get horizontale
+     * Get lat
      *
      * @return int
      */
-    public function getHorizontale()
+    public function getLat()
     {
-        return $this->horizontale;
+        return $this->lat;
     }
 
     /**
-     * Set verticale
+     * Set lng
      *
-     * @param integer $verticale
+     * @param integer $lng
      *
      * @return Reclamation
      */
-    public function setVerticale($verticale)
+    public function setLng($lng)
     {
-        $this->verticale = $verticale;
+        $this->lng = $lng;
 
         return $this;
     }
 
     /**
-     * Get verticale
+     * Get lng
      *
      * @return int
      */
-    public function getVerticale()
+    public function getLng()
     {
-        return $this->verticale;
+        return $this->lng;
     }
 
     /**

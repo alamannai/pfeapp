@@ -8,6 +8,8 @@ imports:
 parameters:
     locale: en
     image_directory : '%kernel.project_dir%/web/uploads/imageProjet'
+    locale: en
+    imageRec_directory : '%kernel.project_dir%/web/uploads/imageReclamation'
 
 framework:
     serializer:
