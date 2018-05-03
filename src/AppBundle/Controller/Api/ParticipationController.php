@@ -108,7 +108,7 @@ class ParticipationController extends Controller
                                    );     
                                       }else{
                                           $rep =array(
-                                                'status' => true,  
+                                                'status' => false,  
                                                 'data'=> '',
                                                'msg' => 'pas de Participation'
 

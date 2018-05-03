@@ -154,6 +154,22 @@ class SondageController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $sond = $em->getRepository('AppBundle:LimiteSondage')->findOneBy( [ 'sondage'=>$sondage->getId()]);
 
+                    $t=false;
+
+                    if ($request->request->get('token') ) {
+
+                        $emm = $this->getDoctrine()->getManager();
+                        $log = $emm->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
+
+                        $citoyen=$log->getCitoyen();
+                        $em = $this->getDoctrine()->getManager();
+                        $parti = $em->getRepository('AppBundle:Participation')->findBy(['sondage' => $sondage , 'citoyen' => $citoyen->getId()]);
+
+                        if ($parti) {
+                            $t=true;
+                        }
+                    }
+
                     foreach ($participations as $participation) {
                        if ($participation->getType()== true) {
                            $pour++;
@@ -167,7 +183,8 @@ class SondageController extends Controller
                         'description'=>$sondage->getDescription(),
                         'pour'=>$pour,
                         'contre'=>$contre,
-                        'fin'=>$sond->getFin()
+                        'fin'=>$sond->getFin(),
+                        'estparticipe'=>$t
                     );
 
             

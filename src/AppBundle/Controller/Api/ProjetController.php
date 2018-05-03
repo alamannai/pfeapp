@@ -58,6 +58,11 @@ class ProjetController extends Controller
                             $msg='Projet termine';
                     }
                 }
+                if ($projet->getImage()) {
+                    $img=$projet->getImage();
+                }else{
+                    $img="aucune image" ;
+                }
                     $list[]=array(
                         'id' =>$projet->getId(),
                         'sujet'=>$projet->getSujet(),
@@ -67,6 +72,7 @@ class ProjetController extends Controller
                         'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
                         'etat'=>$msg,
+                        'image'=> 'http://localhost/pfeapp/web/uploads/imageProjet/'.$projet->getImage()
                         
                     );
 
@@ -103,7 +109,7 @@ class ProjetController extends Controller
         
 
         $response = $serializer->serialize($listepro, 'json');
-         
+        
         
         return new Response($response);
     
