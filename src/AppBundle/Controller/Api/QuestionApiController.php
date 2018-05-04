@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Commune;
 use AppBundle\Entity\Citoyen;
-use AppBundle\Entity\Reclamation;
+use AppBundle\Entity\Question;
 use AppBundle\Entity\Liste;
 use AppBundle\Form\ListeType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -24,10 +24,10 @@ use Symfony\Component\Serializer\Serializer;
 
 
     /**
-     * @Route("api/reclamation")
+     * @Route("api/question")
      */
 
-class ReclamationApiController extends Controller
+class QuestionApiController extends Controller
 {
 
  /**
@@ -43,7 +43,7 @@ class ReclamationApiController extends Controller
 
 
         $token=$request->request->get('token') ;
-        $contenu=$request->request->get('contenu');
+        $questionfield=$request->request->get('question');
         $commune=$request->request->get('commune');
 
         if ($token) {
@@ -60,42 +60,21 @@ class ReclamationApiController extends Controller
         $emm = $this->getDoctrine()->getManager();
         $abs = $emm->getRepository('AppBundle:Liste')->findOneBy([ 'commune'=>$comm, 'citoyen'=>$citoyen,'blocked'=>false]);
         
-          if ($abs && $contenu && $comm) {
-                              $reclamation = new Reclamation();
+          if ($abs && $questionfield && $comm) {
+                              $question = new Question();
                               $timep=new \DateTime();
-                              $reclamation->setCreatedAt($timep);
-                            $reclamation->setContenu($contenu);
-                            $reclamation->setCommune($comm);
-                            $reclamation->setCitoyen($citoyen);
-                            $reclamation->setClosed(null);
+                              $question->setCreatedAt($timep);
+                            $question->setQuestionfield($questionfield);
+                            $question->setCommune($comm);
+                            $question->setCitoyen($citoyen);
+                            $question->setReponse(null);
 
-                            if ((!empty($request->request->get('lat')) && !empty($request->request->get('lng'))) ) {
-                                       $lat=$request->request->get('lat');
-                                       $lng=$request->request->get('lng');
-                                      $reclamation->setLat($lat);
-                                      $reclamation->setLng($lng);
-                                     
-                            }
-
-                            if (!empty($request->files->get('image'))) {
-                               $file = $request->files->get('image');
-                                         $unique = md5($file. time());
-
-                                        $fileName = $unique.'.'.$file->guessExtension();
-
-                                        $file->move(
-                                            $this->getParameter('imageRec_directory'),
-                                            $fileName
-                                        );
-                                         $reclamation->setImage($fileName);
-                            }
-
-                            $em->persist($reclamation);
+                            $em->persist($question);
                             $em->flush();
                             $rep=array(
                                 'status' => true ,
                                 'data' => '',
-                                'msg'=> 'Reclamation envoyee'
+                                'msg'=> 'Question envoyee'
                               );
                   }else{
                     $rep=array(
@@ -147,38 +126,33 @@ class ReclamationApiController extends Controller
         $citoyen=$log->getCitoyen();
 
         $emm = $this->getDoctrine()->getManager();
-        $recs = $emm->getRepository('AppBundle:Reclamation')->findBy([ 'citoyen'=>$citoyen->getId()]);
-                  if ($recs) {
-                     foreach ($recs as $rec ) {
+        $ques = $emm->getRepository('AppBundle:Question')->findBy([ 'citoyen'=>$citoyen->getId()]);
+                  if ($ques) {
+                     foreach ($ques as $que ) {
 
-                                if ($rec->getClosed()=== true) {
-                                  $et='resolue';
-                                }elseif($rec->getClosed()=== null){
-                                  $et='En attente';
+                                if ($que->getReponse()) {
+                                  $r=$que->getReponse()->getReponsefield();
                                 }else{
-                                  
-                                  $et='En traitement';
+                                  $r='En traitement';
                                 }
 
                         $liste[]=array(
-                          'id'=>$rec->getId(),
-                          'contenu'=>$rec->getContenu(),
-                          'etat'=> $et,
-                          'image'=> 'http://localhost/pfeapp/web/uploads/imageReclamation/'.$rec->getImage(),
-                          'lat'=> $rec->getLat(),
-                          'lng'=>$rec->getLng()
+                          'id'=>$que->getId(),
+                          'question'=>$que->getQuestionfield(),
+                          'reponse'=> $r,
+                          'createdat'=>$que->getCreatedAt(),
                         );
                       }
                       $rep=array(
                           'status'=>true,
                           'data'=> $liste,
-                          'msg'=>'Vos reclamations'
+                          'msg'=>'Vos questions'
                       );
                   }else{
                     $rep=array(
                           'status'=>false,
                           'data'=> '',
-                          'msg'=>'Aucune reclamation'
+                          'msg'=>'Aucun question'
                       );
                   }
            
@@ -223,38 +197,33 @@ class ReclamationApiController extends Controller
         $citoyen=$log->getCitoyen();
 
         $emm = $this->getDoctrine()->getManager();
-        $rec = $emm->getRepository('AppBundle:Reclamation')->find($id);
-                  if ($rec) {
+        $que = $emm->getRepository('AppBundle:Question')->findOneBy(['id'=>$id, 'citoyen'=>$citoyen->getId()]);
+                  if ($que) {
                     
 
-                                if ($rec->getClosed()== true) {
-                                  $et='resolue';
-                                }elseif($rec->getClosed()== null){
-                                  $et='En attente';
+                                if ($que->getReponse()) {
+                                  $r=$que->getReponse()->getReponsefield();
                                 }else{
-                                  
-                                  $et='En traitement';
+                                  $r='En traitement';
                                 }
 
                         $liste=array(
-                          'id'=>$rec->getId(),
-                          'contenu'=>$rec->getContenu(),
-                          'etat'=> $et,
-                          'image'=> 'http://localhost/pfeapp/web/uploads/imageReclamation/'.$rec->getImage(),
-                          'lat'=> $rec->getLat(),
-                          'lng'=>$rec->getLng()
+                          'id'=>$que->getId(),
+                          'question'=>$que->getQuestionfield(),
+                          'reponse'=> $r,
+                          'createdat'=>$que->getCreatedAt(),
                         );
                       
                       $rep=array(
                           'status'=>true,
                           'data'=> $liste,
-                          'msg'=>'Votre reclamation'
+                          'msg'=>'Votre question'
                       );
                   }else{
                     $rep=array(
-                          'status'=>true,
+                          'status'=>false,
                           'data'=> '',
-                          'msg'=>'Invalide reclamation'
+                          'msg'=>'Aucun question'
                       );
                   }
            
@@ -285,7 +254,7 @@ class ReclamationApiController extends Controller
      * @Method("DELETE")
      */
 
-    public function deleteRec(Request $request,$id)
+    public function deleteQue(Request $request,$id)
     {
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
@@ -315,13 +284,13 @@ class ReclamationApiController extends Controller
         }else{
 
                     $em = $this->getDoctrine()->getManager();
-                $c = $em->getRepository('AppBundle:Reclamation')->findOneBy(['id'=>$id, 'closed'=>null]);
+                $c = $em->getRepository('AppBundle:Question')->findOneBy(['id'=>$id, 'reponse'=>null]);
 
                 if (!$c) {
                     $rep =array(
                     'status' => false,  
                       'data'=> '',
-                     'msg' => 'Invalide reclamation '
+                     'msg' => 'Invalid question '
 
                      );
                 }else{
@@ -335,7 +304,7 @@ class ReclamationApiController extends Controller
                                 $rep =array(
                                     'status' => true,  
                                       'data'=> '',
-                                     'msg' => 'reclamation supprimee '
+                                     'msg' => 'question supprimee '
 
                                      );
                         }else{

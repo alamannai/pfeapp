@@ -111,5 +111,36 @@ class Question
     {   
         $this->citoyen = $citoyen;
     }
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Commune")
+     * @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
+     */
+    private $commune;
+
+    public function getCommune()
+   {
+     return $this->commune;
+   }
+
+   public function setCommune(Commune $commune)
+    {   
+        $this->commune = $commune;
+    }
+
+     /**
+    * @ORM\OneToOne(targetEntity="Reponse", cascade={"persist"})
+    */
+    private $reponse;
+    
+    public function getReponse()
+   {
+     return $this->reponse;
+   }
+
+   public function setReponse( $reponse)
+    {   
+        $this->reponse = $reponse;
+    }
 }
 

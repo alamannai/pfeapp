@@ -43,7 +43,7 @@ class abonnerController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
 
-        $token=$request->request->get('token');
+        $token=$request->query->get('token');
         
         if ($token) {
 
@@ -66,6 +66,12 @@ class abonnerController extends Controller
                                     'status' => true ,
                                     'data' => $liste,
                                     'msg' => 'Liste des communes'
+                                );
+                            }else{
+                              $rep=array(
+                                    'status' => false ,
+                                    'data' => '',
+                                    'msg' => 'Aucune commune'
                                 );
                             }
 
