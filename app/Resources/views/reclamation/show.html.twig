@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reclamation</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reclamation.id }}</td>
+            </tr>
+            <tr>
+                <th>Contenu</th>
+                <td>{{ reclamation.contenu }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if reclamation.createdAt %}{{ reclamation.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Lat</th>
+                <td>{{ reclamation.lat }}</td>
+            </tr>
+            <tr>
+                <th>Lng</th>
+                <td>{{ reclamation.lng }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ reclamation.image }}</td>
+            </tr>
+            <tr>
+                <th>Closed</th>
+                <td>{% if reclamation.closed %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reclamation_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

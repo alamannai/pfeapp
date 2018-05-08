@@ -25,8 +25,6 @@ class RegistrationCommuneController extends Controller
      */
     public function registerAction(Request $request)
     {   
-        $nom=$request->request->get('nom');
-        $pseudo=$request->request->get('pseudo');
 
 
 
@@ -38,17 +36,11 @@ class RegistrationCommuneController extends Controller
 
         // Create a new blank commune and process the form
         $commune = new Commune();
-        $commune->setNom($nom);
-        $commune->setPseudo($pseudo);
-
-
-        
         $form = $this->createForm(CommuneType::class, $commune);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
                     
-            
             // Encode the new users password
             $encoder = $this->get('security.password_encoder');
             $password = $encoder->encodePassword($commune, $commune->getPlainPassword());
@@ -56,6 +48,7 @@ class RegistrationCommuneController extends Controller
 
             // Set their role
             $commune->setRole('ROLE_COMMUNE');
+
             
             // Save
             $em = $this->getDoctrine()->getManager();
@@ -67,7 +60,7 @@ class RegistrationCommuneController extends Controller
 
         return $this->render('admin/register.html.twig', [
             'form' => $form->createView(),
-            'gouvernorats'=> $governorats,
+            'gouvernorats'=> $governorats
 
         ]);
     }

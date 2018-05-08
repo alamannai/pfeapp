@@ -1,29 +1,27 @@
-{% extends 'default/dashboard.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
 
-
-
- <div class="col-lg-12">
+     <div class="col-lg-12">
           <!-- Example Notifications Card-->
           <div class="card mb-3">
             <div class="card-header">
-               Liste des projets </div>
-          {% for projet in projets %}
-              <a class="list-group-item list-group-item-action" href="{{ path('projet_show', { 'id': projet.id }) }}">
+               Liste des sondages </div>
+          {% for sondage in sondages %}
+              <a class="list-group-item list-group-item-action" href="{{ path('sondage_show', { 'id': sondage.id }) }}">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
                   <div class="media-body">
-                    <strong>Sujet :</strong> {{ projet.sujet }}
-                    <div class="text-muted smaller">Date Début : {% if projet.dateDebut %}{{ projet.dateDebut|date('Y-m-d') }}{% endif %}</div>
-                    <div class="text-muted smaller">Durée : {{ projet.duree }}</div>
+                    <strong>Description :</strong>
+                    <p>{{ sondage.description }}</p> 
+                    <div class="text-muted smaller">Etat : {% if sondage.termine == true %} terminé{% else %} encours {% endif %}</div>
                   </div>
                 </div>
               </a>
               
          {% endfor %}
-            <div class="card-footer small text-muted"><a href="{{ path('projet_new') }}" class="btn btn-sm">Nouveau projet</a></div>
+            <div class="card-footer small text-muted"><a href="{{ path('sondage_new') }}" class="btn btn-sm">Nouveau sondage</a></div>
           </div>
         </div>
         <!--Pagination-->
@@ -54,5 +52,4 @@
         </li>
     </ul>
 </nav>
-   
 {% endblock %}

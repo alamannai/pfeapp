@@ -26,7 +26,7 @@ class CitoyenController extends Controller
 
         $liste = $em->getRepository('AppBundle:Liste')->findBy(['commune'=>'9'],['blocked' => 'ASC']);
 
-        return $this->render('citoyen/index.html.twig', array(
+        return $this->render('espaceCommune/index.html.twig', array(
             'liste' => $liste,
         ));
     }

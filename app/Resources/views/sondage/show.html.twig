@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Sondage</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ sondage.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ sondage.description }}</td>
+            </tr>
+            <tr>
+                <th>Termine</th>
+                <td>{% if sondage.termine %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('sondage_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('sondage_edit', { 'id': sondage.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
