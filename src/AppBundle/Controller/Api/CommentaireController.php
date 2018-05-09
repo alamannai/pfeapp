@@ -42,6 +42,8 @@ class CommentaireController extends Controller
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
 
+        $token=$request->request->get('token') ;
+        if ($token ) {
         $em = $this->getDoctrine()->getManager();
         $p = $em->getRepository('AppBundle:Projet')->find( $projet);
 
@@ -95,6 +97,14 @@ class CommentaireController extends Controller
                      'msg' => 'Invalid projet'
 
                      );
+            }
+        }else{
+            $rep =array(
+              'status' => false,  
+              'data'=> '',
+             'msg' => 'Invalide parametre'
+
+             );
         }
         
         $response = $serializer->serialize($rep, 'json');

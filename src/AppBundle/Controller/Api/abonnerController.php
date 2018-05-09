@@ -133,8 +133,7 @@ class abonnerController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $com = $em->getRepository('AppBundle:Commune')->find($commune);
 
-                    $em = $this->getDoctrine()->getManager();
-                    $abs = $em->getRepository('AppBundle:Liste')->findBy([ 'citoyen'=>$idc, 'blocked'=> false]);
+                    
 
                     $em = $this->getDoctrine()->getManager();
                     $abcomm = $em->getRepository('AppBundle:Liste')->findOneBy(['commune'=> $commune,'citoyen'=>$idc]);
@@ -142,7 +141,7 @@ class abonnerController extends Controller
                         $val=true;
                         $blok=false;
 
-                                if ((count($abs) < 3) && (count($abs) >=0)) {
+                                
                                     
 
                                         if ($abcomm) {
@@ -196,13 +195,7 @@ class abonnerController extends Controller
                                     
                                     
 
-                                }else{
-                                    $rep=array(
-                                        'status'=>false,
-                                        'data'=>'',
-                                        'msg'=>'deja abonner a 3 communes'
-                                    );
-                                }
+                               
                     }
 
             
