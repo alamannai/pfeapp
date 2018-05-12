@@ -2,24 +2,27 @@
 
 {% block body %}
 <div class="container">
-    <div class="card card-login mx-auto mt-5" style="width: 23rem;">
+    <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form>
+        <form class="form-horizontal" role="form" method="POST" action="{{ path('security_login_check') }}">
+          {% if error %}
+            <div class="alert alert-danger">
+              {{ error.messageKey|trans(error.messageData) }}
+            </div>
+          {% endif %}
           <div class="form-group">
             <label for="pseudo">Pseudo</label>
-            <input class="form-control" id="pseudo" type="text" placeholder="Enter pseudo">
+            <input class="form-control" id="pseudo" type="text" name="_pseudo" aria-describedby="emailHelp" placeholder="Entrer pseudo">
           </div>
           <div class="form-group">
-            <label for="Password">Password</label>
-            <input class="form-control" id="Password" type="password" placeholder="Password">
+            <label for="password">Mot de passe</label>
+            <input class="form-control" id="password" type="password" name="_password" placeholder="Entrer mot de passe">
           </div>
-
-          <button class="btn btn-primary btn-block" type="sybmit">Login</button>
+         
+          <button  type="submit" class="btn btn-primary btn-block" >Login</button>
         </form>
-        <div class="text-center">
-          <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
-        </div>
+        
       </div>
     </div>
   </div>

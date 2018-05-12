@@ -92,6 +92,10 @@ class Sondage
    {
      return $this->commune->getId();
    }
+   public function setCommune( $commune)
+    {   
+        $this->commune = $commune;
+    }
 
 
    /**

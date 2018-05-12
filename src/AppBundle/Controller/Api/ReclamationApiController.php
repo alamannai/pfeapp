@@ -176,7 +176,7 @@ class ReclamationApiController extends Controller
                       );
                   }else{
                     $rep=array(
-                          'status'=>false,
+                          'status'=>true,
                           'data'=> '',
                           'msg'=>'Aucune reclamation'
                       );

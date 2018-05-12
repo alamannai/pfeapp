@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Projet;
+use AppBundle\Entity\Liste;
+use AppBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -65,13 +67,44 @@ class ProjetController extends Controller
                 $this->getParameter('image_directory'),
                 $fileName
             );
+            $e = $this->getDoctrine()->getManager();
+            $citoyens = $e->getRepository('AppBundle:Liste')->findBy(['commune'=>'9', 'blocked'=> false]);
+
+             foreach ($citoyens as $citoyen) {
+                $cit=$citoyen->getCitoyen();
+                $com=$citoyen->getCommune();
+
+                $notif= new Notification();
+                $notif->setContenu('Nouveau Projet');
+                $time=new \DateTime(); 
+                $notif->setCitoyen($cit);
+                $notif->setCommune($com);
+                $notif->setVue(false);
+                $notif->setCreatedAt($time);
+
+
+                $e = $this->getDoctrine()->getManager();
+                $e->persist($notif);
+                $e->flush();
+
+            }
+            
 
             $projet->setImage($fileName);
+            $projet->setCommune($com);
+
+
+                       
 
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($projet);
             $em->flush();
+
+
+            
+            
+           
 
             return $this->redirectToRoute('projet_show', array('id' => $projet->getId()));
         }

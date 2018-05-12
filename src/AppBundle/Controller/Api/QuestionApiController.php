@@ -150,7 +150,7 @@ class QuestionApiController extends Controller
                       );
                   }else{
                     $rep=array(
-                          'status'=>false,
+                          'status'=>true,
                           'data'=> '',
                           'msg'=>'Aucun question'
                       );

@@ -213,6 +213,10 @@ public function getAllommentaires()
    {
      return $this->commune->getId();
    }
+   public function setCommune( $commune)
+    {   
+        $this->commune = $commune;
+    }
 
 
     

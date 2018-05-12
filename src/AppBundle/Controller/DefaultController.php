@@ -27,4 +27,14 @@ class DefaultController extends Controller
 
         return $this->render('default/dashboard.html.twig');
     }
+
+    /**
+   * @Route("/profil", name="profil")
+   */
+    public function showProfilAction(Request $request)
+    {
+       
+
+        return $this->render('espaceCommune/user.html.twig');
+    }
 }
