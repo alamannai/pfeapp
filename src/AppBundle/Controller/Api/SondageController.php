@@ -155,18 +155,21 @@ class SondageController extends Controller
                     $sond = $em->getRepository('AppBundle:LimiteSondage')->findOneBy( [ 'sondage'=>$sondage->getId()]);
 
                     $t=false;
-
-                    if ($request->request->get('token') ) {
-
+           $token='';
+         
+                    if ($request->query->get('token') ) {
+                        $token = $request->query->get('token');
                         $emm = $this->getDoctrine()->getManager();
                         $log = $emm->getRepository('AppBundle:Token')->findOneBy([ 'tokenfield'=>$token]);
-
+                       
+                        if($log){
                         $citoyen=$log->getCitoyen();
                         $em = $this->getDoctrine()->getManager();
                         $parti = $em->getRepository('AppBundle:Participation')->findBy(['sondage' => $sondage , 'citoyen' => $citoyen->getId()]);
 
                         if ($parti) {
                             $t=true;
+                        }
                         }
                     }
 
