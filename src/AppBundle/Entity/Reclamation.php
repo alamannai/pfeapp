@@ -53,8 +53,7 @@ class Reclamation
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=400, nullable=true)
-     * @Assert\NotBlank(message="Please, upload ")
+     * @ORM\Column(name="image", type="text")
      */
     private $image;
 
@@ -175,7 +174,6 @@ class Reclamation
     /**
      * Set image
      *
-     * @param string $image
      *
      * @return Reclamation
      */
@@ -189,7 +187,6 @@ class Reclamation
     /**
      * Get image
      *
-     * @return string
      */
     public function getImage()
     {

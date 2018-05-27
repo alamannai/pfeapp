@@ -37,4 +37,14 @@ class DefaultController extends Controller
 
         return $this->render('espaceCommune/user.html.twig');
     }
+
+    /**
+   * @Route("/admin", name="admin")
+   */
+    public function showadminAction(Request $request)
+    {
+       
+
+        return $this->render('admin/admin.html.twig');
+    }
 }

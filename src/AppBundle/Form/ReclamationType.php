@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
 class ReclamationType extends AbstractType
@@ -26,7 +26,7 @@ class ReclamationType extends AbstractType
         ->add('lng', IntegerType::class)
         ->add('closed', ChoiceType::class)
         ->add('lat', IntegerType::class)
-        ->add('image', FileType::class, [ 
+        ->add('image', TextType::class, [ 
             'data_class' => null
         ]);
     }

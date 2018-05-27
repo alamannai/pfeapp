@@ -32,7 +32,7 @@ class CommentaireController extends Controller
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, $encoders);
-        $token = $request->request->get('token');
+        $token = $request->query->get('token');
         $em = $this->getDoctrine()->getManager();
         $p = $em->getRepository('AppBundle:Projet')->find($projet);
         if ($p != null) {
@@ -40,7 +40,7 @@ class CommentaireController extends Controller
             if ($c == $commune) {
                 $em = $this->getDoctrine()->getManager();
                 $commentaires = $em->getRepository('AppBundle:Commentaire')->findBy(['projet' => $projet]);
-                $liste;
+                $liste='';
                 foreach ($commentaires as $commentaire) {
                     if ($commentaire->getValidation() == true) {
                         $nom = $commentaire->getCitoyen()->getNom();

@@ -77,17 +77,10 @@ class ReclamationApiController extends Controller
                                      
                             }
 
-                            if (!empty($request->files->get('image'))) {
-                               $file = $request->files->get('image');
-                                         $unique = md5($file. time());
-
-                                        $fileName = $unique.'.'.$file->guessExtension();
-
-                                        $file->move(
-                                            $this->getParameter('imageRec_directory'),
-                                            $fileName
-                                        );
-                                         $reclamation->setImage($fileName);
+                            if (!empty($request->request->get('image'))) {
+                               $image = $request->request->get('image');
+                                         
+                                         $reclamation->setImage($image);
                             }
 
                             $em->persist($reclamation);
@@ -164,7 +157,7 @@ class ReclamationApiController extends Controller
                           'id'=>$rec->getId(),
                           'contenu'=>$rec->getContenu(),
                           'etat'=> $et,
-                          'image'=> 'http://localhost/pfeapp/web/uploads/imageReclamation/'.$rec->getImage(),
+                          'image'=> $rec->getImage(),
                           'lat'=> $rec->getLat(),
                           'lng'=>$rec->getLng()
                         );
