@@ -24,7 +24,7 @@ class EtatProjet
     /**
      * @var string
      *
-     * @ORM\Column(name="reason", type="string", length=255)
+     * @ORM\Column(name="reason", type="string", length=255, nullable=true)
      */
     private $reason;
 
@@ -76,6 +76,12 @@ class EtatProjet
       public function getEtat()
     {
         return $this->projet;
+    }
+     public function setProjet($projet)
+    {
+        $this->projet = $projet;
+
+        return $this;
     }
     
 }

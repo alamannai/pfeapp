@@ -1,44 +1,108 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Reclamation</h1>
+    <a href="{{ path('reclamation_index') }}" class="btn btn-default btn-fill">Back to the list</a>
+    <h1>Réclamation</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reclamation.id }}</td>
-            </tr>
-            <tr>
-                <th>Contenu</th>
-                <td>{{ reclamation.contenu }}</td>
-            </tr>
-            <tr>
-                <th>Createdat</th>
-                <td>{% if reclamation.createdAt %}{{ reclamation.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Lat</th>
-                <td>{{ reclamation.lat }}</td>
-            </tr>
-            <tr>
-                <th>Lng</th>
-                <td>{{ reclamation.lng }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ reclamation.image }}</td>
-            </tr>
-            <tr>
-                <th>Closed</th>
-                <td>{% if reclamation.closed %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('reclamation_index') }}">Back to the list</a>
-        </li>
-    </ul>
+    
+            
+    
+
+
+
+                    <div class="col-md-8">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title"> Contenu : {{ reclamation.contenu }}</strong></h4>
+                                
+                               
+                            </div>
+                            <div class="content">
+                                <div class="overflow-x:auto;">
+                                    <table class="table">
+                                        <tbody>
+                                         <tr>
+                                          
+                                           
+                                            </tr>
+                                            <tr>
+                                                  <td> 
+                                             <h4>Etat : <small>{% if reclamation.closed %}<div class="alert alert-success">Fermé</div> {% else %}Encours 
+                                             <a href="{{ path('reclamation_etat', {'id':reclamation.id}) }}" class="btn btn-success btn-fill  btn-sm" type="submit">Fermé</a>
+                                         {% endif %}</small></h4>
+                                              
+                                                </td>
+                                                </tr>
+                                                <tr>
+                                            <td> <img src="{{ reclamation.image }}" class="img-responsive" alt="Cinque Terre"  width="750" height="400"></td>
+                                               
+                                           
+                                             
+                                               
+                                                </tr>
+                                      
+                                 
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="footer">
+                                    <hr>
+                                    
+                                    <div class="stats">
+
+                                     Date dépot : {% if reclamation.createdAt %}{{ reclamation.createdAt|date('Y-m-d H:i:s') }}{% endif %}
+                                 
+                                     
+                                 
+                                    </div>
+                                    {{ form_start(delete_form) }}
+                                        <button type="submit" class="btn btn-danger btn-fill pull-right btn-sm">Supprimer</button>
+                                    {{ form_end(delete_form) }}
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="col-md-4">
+                        <div class="card ">
+                            <div class="header">
+
+                                <h4 class="title"> Emplacement <i class="fa fa-map-marker"></i> </h4>
+
+                                
+                               
+                            </div>
+                            <div class="content">
+                                <div class="table-full-width">
+                                    <table class="table">
+                                        <tbody>
+                                         <tr>
+                                          <td> 
+                                           <div class="google-map"  ><iframe frameborder="0" style="border:0" src="
+                                            https://www.google.com/maps/embed/v1/place?key=AIzaSyA0Dx_boXQiwvdz8sJHoYeZNVTdoWONYkU&amp;q=place_id:ChIJn6wOs6lZwokRLKy1iqRcoKw" ></iframe></div>
+                                             </td>
+                                             
+                                               
+                                                </tr>
+                                      
+                                 
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="footer">
+                                    <hr>
+                                    
+                                    <div class="stats">
+                                     <a target="_blank" class="btn btn-primary btn-fill" jstcache="15" href="http://maps.google.com/maps?q={{reclamation.lat}},{{reclamation.lng}}">Agrandir le plan</a>
+                                    </div>
+                                    
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 {% endblock %}

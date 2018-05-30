@@ -1,16 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Sondage creation</h1>
+
+<a href="{{ path('sondage_index') }}" class="btn btn-default btn-fill ">Retourner à la liste</a> 
+<div></div><br>
+   
+
+<div class="table-responsive">
+
+        <div class="col-sm-12">
+          <div class="well">
+             <h1>Nouveau Sondage </h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+        <input type="submit" value="Create" class="btn btn-info btn-fill">
     {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('sondage_index') }}">Back to the list</a>
-        </li>
-    </ul>
+          </div>
+        </div>
+    </div>
+        
 {% endblock %}

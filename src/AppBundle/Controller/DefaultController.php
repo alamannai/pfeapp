@@ -8,15 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    /**
-   * @Route("/", name="index")
-   */
-    public function showAction(Request $request)
-    {
-       
-
-        return $this->render('default/index.html.twig');
-    }
 
       /**
    * @Route("/dashboard", name="dashboard")
@@ -33,9 +24,12 @@ class DefaultController extends Controller
    */
     public function showProfilAction(Request $request)
     {
-       
+       $em = $this->getDoctrine()->getManager();
+        $governorats = $em->getRepository('AppBundle:Gouvernorat')->findall();
 
-        return $this->render('espaceCommune/user.html.twig');
+        return $this->render('espaceCommune/user.html.twig', [
+            'gouvernorats'=> $governorats
+          ]);
     }
 
     /**

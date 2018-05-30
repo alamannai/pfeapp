@@ -219,23 +219,16 @@ public function getAllommentaires()
     }
 
 
-    
-    /**
-    * @ORM\OneToOne(targetEntity="EtatProjet", cascade={"persist"})
-    */
-      private $etat;
-
     /**
      * @var bool
      *
-     * @ORM\Column(name="done", type="boolean",nullable=true)
+     * @ORM\Column(name="done", type="string",nullable=true, length=1)
      */
     private $done;
 
     /**
      * Set done
      *
-     * @param bool $done
      *
      */
     public function setDone($done)
@@ -247,7 +240,6 @@ public function getAllommentaires()
     /**
      * Get done
      *
-     * @return bool
      */
     public function getDone()
     {

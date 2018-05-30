@@ -15,7 +15,14 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter Citoyen" />
+                        <form action="" method="">
+                      
+                        <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filtrer Citoyen" />
+                        <br>
+                       <button type="submit" class="btn btn-info btn-fill  btn-sm pull-left">Recherche </button>
+                   
+                    </form>
+                        
                     </div>
                     <table class="table table-hover" id="dev-table">
                         <thead>
@@ -30,7 +37,10 @@
                             <tr>
                                 <td>{{ l.citoyen.nom }}</td>
                                 <td>{{ l.citoyen.prenom }}</td>
-                                <td>{% if l.blocked %}<div type="submit" class="btn btn-default btn-fill  btn-sm">Débloquer</div>{% else %} <div type="submit"  class="btn btn-danger btn-fill  btn-sm">Bloquer</div>{% endif %} </td>
+                                <td>{% if l.blocked %}
+                                    <a href="{{ path('deblocked', {'id':l.citoyen.id}) }}" class="btn btn-default btn-fill  btn-sm" type="submit">Débloquer</a>{% else %} 
+                                <a href="{{ path('blocked', {'id':l.citoyen.id}) }}" class="btn btn-danger btn-fill  btn-sm" type="submit">Bloquer</a>
+                            {% endif %} </td>
                             </tr>
                         {% endfor %}
                         </tbody>

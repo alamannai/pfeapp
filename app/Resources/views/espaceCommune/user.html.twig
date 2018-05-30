@@ -15,13 +15,13 @@
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label>Commune (disabled)</label>
-                                                <input type="text" class="form-control" disabled placeholder="Company" value="Grombalia">
+                                                <input type="text" class="form-control" disabled placeholder="Company" value="{{app.user.nom}}">
                                             </div>
                                         </div>
                                         <div class="col-md-7">
                                             <div class="form-group">
                                                 <label for="pseudo">Pseudo</label>
-                                                <input type="text" class="form-control" placeholder="Pseudo">
+                                                <input type="text" class="form-control" placeholder="{{app.user.pseudo}}">
                                             </div>
                                         </div>
                                     </div>
@@ -54,19 +54,24 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Gouvernorat</label>
-                                                <input type="text" class="form-control" placeholder="Gouvernorat" >
+                                                <select class="form-control">
+                                                  <option  >Choisir gouvernorat</option>
+                                                    {% for gouvernorat in gouvernorats %}
+                                                  <option {% if app.user.gouvernorat == gouvernorat %}selected=""{% endif %} >{{gouvernorat.nom}}</option>
+                                                  {% endfor %} 
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Pays</label>
-                                                <input type="text" class="form-control" placeholder="Pays" >
+                                                <label>Pays (disabled)</label>
+                                                <input type="text" class="form-control" placeholder="Tunisie" disabled >
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Code Postale</label>
-                                                <input type="number" class="form-control" placeholder="ZIP Code">
+                                                <input type="number" class="form-control" placeholder="8030">
                                             </div>
                                         </div>
                                     </div>

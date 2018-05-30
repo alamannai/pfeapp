@@ -47,12 +47,15 @@ class ProjetController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $e = $em->getRepository('AppBundle:EtatProjet')->findOneBy( [ 'projet'=>$projet->getId()]);
 
-                if ($projet->getDone()== null) {
-                        $msg='En cours de realisation';
+                if ($projet->getDone()== 'c') {
+                    if ($e) 
+                    {$msg='Interrompu pour '.$e->getReason();
+                    }else{$msg='Interrompu pour plusieurs raisons';}
+                       
                 }else {
-                        if ( $projet->getDone() == false) {
-
-                            $msg=$e->getReason();
+                        if ( $projet->getDone() == 'a') {
+                                 $msg='En cours de realisation';
+                            
                         }else{
 
                             $msg='Projet termine';
@@ -140,12 +143,15 @@ class ProjetController extends Controller
             $em = $this->getDoctrine()->getManager();
             $e = $em->getRepository('AppBundle:EtatProjet')->findOneBy( [ 'projet'=>$projet->getId()]);
 
-                if ($projet->getDone()== null) {
-                        $msg='En cours de realisation';
+                if ($projet->getDone()== 'c') {
+                    if ($e) 
+                    {$msg='Interrompu pour '.$e->getReason();
+                    }else{$msg='Interrompu pour plusieurs raisons';}
+                       
                 }else {
-                        if ($projet->getDone() == false) {
-
-                            $msg=$e->getReason();
+                        if ( $projet->getDone() == 'a') {
+                                 $msg='En cours de realisation';
+                            
                         }else{
 
                             $msg='Projet termine';

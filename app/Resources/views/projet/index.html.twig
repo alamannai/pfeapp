@@ -10,7 +10,9 @@
           <div class="card mb-3">
             <div class="card-header">
                Liste des projets </div>
+                {% set i = 0 %}
           {% for projet in projets %}
+                {% set i = i + 1 %}
               <a class="list-group-item list-group-item-action" href="{{ path('projet_show', { 'id': projet.id }) }}">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
@@ -21,8 +23,16 @@
                   </div>
                 </div>
               </a>
-              
          {% endfor %}
+         {% if i == 0 %}
+            <div class="list-group-item list-group-item-action" href="#">
+            <div class="media-body">
+
+                    <p>Aucun Projet.</p> 
+
+                  </div>
+                     </div>
+          {% endif %}
             <div class="card-footer small text-muted"><a href="{{ path('projet_new') }}" class="btn btn-info btn-fill pull-right">Nouveau projet</a></div>
           </div>
         </div>

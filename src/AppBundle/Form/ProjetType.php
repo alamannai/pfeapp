@@ -25,12 +25,6 @@ class ProjetType extends AbstractType
         ->add('contenu', TextareaType::class)
         ->add('dateDebut', DateType::class)
         ->add('duree', TextType::class)
-        ->add('done', ChoiceType::class, array(
-                'choices'  => array(
-                    'En cours'=>null,
-                    'Interrompu' => false,
-                    'Terminé' => true,
-                    )))
         ->add('image', FileType::class, [ 
             'data_class' => null
         ]);

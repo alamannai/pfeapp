@@ -5,8 +5,11 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Projet;
 use AppBundle\Entity\Liste;
 use AppBundle\Entity\Notification;
+use AppBundle\Entity\Commentaire;
+use AppBundle\Entity\EtatProjet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Projet controller.
  *
- * @Route("projet")
+ * @Route("commune/projets")
  */
 class ProjetController extends Controller
 {
@@ -26,11 +29,10 @@ class ProjetController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $commune = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $nb=0;
-
-        $projets = $em->getRepository('AppBundle:Projet')->findAll();
+        $projets = $em->getRepository('AppBundle:Projet')->findBy(['commune'=> $commune ]);
 
 
         
@@ -50,12 +52,11 @@ class ProjetController extends Controller
      */
     public function newAction(Request $request)
     {
+        $commune = $this->getUser();
         $projet = new Projet();
         $form = $this->createForm('AppBundle\Form\ProjetType', $projet);
         $form->handleRequest($request);
 
-        $em = $this->getDoctrine()->getManager();
-        $projets = $em->getRepository('AppBundle:Projet')->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
              $file = $projet->getImage();
@@ -68,9 +69,8 @@ class ProjetController extends Controller
                 $fileName
             );
             $e = $this->getDoctrine()->getManager();
-            $citoyens = $e->getRepository('AppBundle:Liste')->findBy(['commune'=>'9', 'blocked'=> false]);
-
-             foreach ($citoyens as $citoyen) {
+            if ($citoyens = $e->getRepository('AppBundle:Liste')->findBy(['commune'=>$commune, 'blocked'=> false])) {
+               foreach ($citoyens as $citoyen) {
                 $cit=$citoyen->getCitoyen();
                 $com=$citoyen->getCommune();
 
@@ -78,7 +78,7 @@ class ProjetController extends Controller
                 $notif->setContenu('Nouveau Projet');
                 $time=new \DateTime(); 
                 $notif->setCitoyen($cit);
-                $notif->setCommune($com);
+                $notif->setCommune($commune);
                 $notif->setVue(false);
                 $notif->setCreatedAt($time);
 
@@ -86,12 +86,18 @@ class ProjetController extends Controller
                 $e = $this->getDoctrine()->getManager();
                 $e->persist($notif);
                 $e->flush();
+            }
+            
+            
+
+             
 
             }
             
 
             $projet->setImage($fileName);
-            $projet->setCommune($com);
+            $projet->setDone('a');
+            $projet->setCommune($commune);
 
 
                        
@@ -123,11 +129,18 @@ class ProjetController extends Controller
      * @Route("/{id}", name="projet_show")
      * @Method("GET")
      */
-    public function showAction(Projet $projet)
+    public function showAction(Request $request ,Projet $projet )
     {
         $deleteForm = $this->createDeleteForm($projet);
-      
 
+        $em = $this->getDoctrine()->getManager();
+        $r = $em->getRepository('AppBundle:EtatProjet')->findOneBy(['projet'=> $projet]);
+        if ($r) {
+            $reason=$r->getReason();
+        }else{
+            $reason='v';
+        }
+        
 
         return $this->render('projet/show.html.twig', array(
             'projet' => $projet,
@@ -135,53 +148,7 @@ class ProjetController extends Controller
             'votes'=> count($projet->getVotes()),
             'commentaires'=>$projet->getAllommentaires(),
             'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing projet entity.
-     *
-     * @Route("/{id}/edit", name="projet_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Projet $projet)
-    {
-        $deleteForm = $this->createDeleteForm($projet);
-        $editForm = $this->createForm('AppBundle\Form\ProjetType', $projet);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $imageFile = $editForm->get('image')->getData();
-        if (null != $imageFile) { 
-
-            $file = $projet->getImage();
-             $unique = md5($file. time());
-
-            $fileName = $unique.'.'.$file->guessExtension();
-
-            $file->move(
-                $this->getParameter('image_directory'),
-                $fileName
-            );
-
-            $projet->setImage($fileName);
-            $this->getDoctrine()->getManager()->flush();
-
-            //4. add a success flash, and anything else you need, and redirect to a route
-        } else { //if the user has chosen to edit a different field (but not the image one)
-            $this->getDoctrine()->getManager()->flush();
-            
-        }
-
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('projet_edit', array('id' => $projet->getId()));
-        }
-
-        return $this->render('projet/edit.html.twig', array(
-            'projet' => $projet,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'reason'=>$reason
         ));
     }
 
@@ -197,6 +164,26 @@ class ProjetController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $e = $this->getDoctrine()->getManager();
+            $commentaires = $e->getRepository('AppBundle:Commentaire')->findBy(['projet' =>$projet]);
+
+            if ($commentaires) {
+                foreach ($commentaires as $commentaire ) {
+                   $m = $this->getDoctrine()->getManager();
+                    $m->remove($commentaire);
+                    $m->flush();
+                }
+            }
+            $et = $this->getDoctrine()->getManager();
+            $etat = $et->getRepository('AppBundle:EtatProjet')->findOneBy(['projet' =>$projet]);
+            if ($etat) {
+                
+                   $xm = $this->getDoctrine()->getManager();
+                    $xm->remove($etat);
+                    $xm->flush();
+                
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->remove($projet);
             $em->flush();
@@ -220,4 +207,106 @@ class ProjetController extends Controller
             ->getForm()
         ;
     }
+
+     
+
+
+    /**
+     * Finds and displays a commentaire entity.
+     *
+     * @Route("/{id}/valider",name="commentaire_valid")
+     */
+    public function updateCommentAction(Request $request, Commentaire $commentaire)    {
+
+        $em = $this->getDoctrine()->getManager();
+        $commentaire = $em->getRepository('AppBundle:Commentaire')->find($commentaire);
+
+        $commentaire->setValidation(true);
+
+       $em->persist($commentaire);
+        $em->flush();
+        
+
+        return $this->redirectToRoute('projet_show', array('id' => $commentaire->getProjet()->getId()));
+    }
+
+
+     /**
+     * Finds and displays a commentaire entity.
+     *
+     * @Route("/{id}/deleteCom",name="commentaire_delete")
+     */
+    public function deleteCommentAction(Request $request, Commentaire $commentaire)    {
+
+        $em = $this->getDoctrine()->getManager();
+        $commentaire = $em->getRepository('AppBundle:Commentaire')->find($commentaire);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($commentaire);
+        $em->flush();
+        
+
+        return $this->redirectToRoute('projet_show', array('id' => $commentaire->getProjet()->getId()));
+    }
+
+
+    /**
+     * Finds and displays a projet entity.
+     *
+     * @Route("/{id}/done",name="projet_etat")
+     */
+    public function updateEtatAction(Request $request, Projet $projet)    {
+
+        $em = $this->getDoctrine()->getManager();
+        $projet = $em->getRepository('AppBundle:Projet')->find($projet);
+
+        $projet->setDone('b');
+
+       $em->persist($projet);
+        $em->flush();
+        
+
+        return $this->redirectToRoute('projet_show', array('id' => $projet->getId()));
+    }
+
+    /**
+     * Finds and displays a projet entity.
+     *
+     * @Route("/{id}/interrapted",name="projet_etat_in")
+     */
+    public function updateEtatInAction(Request $request, Projet $projet)    {
+
+        $em = $this->getDoctrine()->getManager();
+        $projet = $em->getRepository('AppBundle:Projet')->find($projet);
+
+        $projet->setDone('c');
+
+       $em->persist($projet);
+        $em->flush();
+        
+
+        return $this->redirectToRoute('projet_show', array('id' => $projet->getId()));
+    }
+
+
+    /**
+     * Finds and displays a projet entity.
+     *
+     * @Route("/{id}/newEt",name="etat_in")
+     */
+    public function interrAction(Request $request, Projet $projet)  
+      {
+        $r=$request->request->get('raison');
+
+        $etat = new EtatProjet();
+        
+        $etat->setProjet($projet);
+        $etat->setReason($r);
+
+          $em = $this->getDoctrine()->getManager();
+         $em->persist($etat);
+        $em->flush();
+        return $this->redirectToRoute('projet_show', array('id' => $projet->getId()));
+    }
+
 }

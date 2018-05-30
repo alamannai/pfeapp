@@ -4,8 +4,8 @@
 
 <a href="{{ path('projet_index') }}" class="btn btn-default btn-fill ">Retourner à la liste</a> 
 <div></div><br>
-<div class="row">
-<div class="col-md-7">
+
+<div class="col-md-4">
                         <div class="card ">
                             <div class="header">
                                 <h4 class="title"> Titre : <strong>{{ projet.sujet }}</strong></h4>
@@ -17,23 +17,39 @@
                                     <table class="table">
                                         <tbody>
                                          <tr>
-                                          <td> <img src="http://localhost/pfeapp/web/uploads/imageProjet/{{projet.image}}" class="img-responsive" alt="Cinque Terre"  ></td>
+                                          <td> <img src="http://localhost/pfeapp/web/uploads/imageProjet/{{projet.image}}" class="img-responsive" alt="Cinque Terre"  width="300" height="200"></td>
                                            
                                             </tr>
                                             <tr>
-                                             <td> <p class="category">{{projet.contenu}}</p></td>
+                                             <td>Description : <p class="category">{{projet.contenu}}</p></td>
                                              
                                                
                                                 </tr>
                                                 <tr>
-                                             <td> <h3>Etat : <small>{% if projet.done == null %}<p>En cours</p> {% else %} <p>{{projet.done}}</p>{% endif %}</small></h3>
-            
+                                             <td> <h3>Etat : <small>        {% if projet.done == 'b'  %}<p>Terminé</p> {% elseif projet.done == 'a'  %} <p>Encours</p>{% else %}<p>Interrompu</p>{% endif %}</small></h3>
                                               <div class="btn-group">
-                                                <button type="button" class="btn btn-primary btn-fill  btn-sm">Terminé</button>
-                                                <button type="button" class="btn btn-danger btn-fill  btn-sm">Interrompu</button>
-                                              </div></td>
-                                             
-                                               
+                                                <a href="{{ path('projet_etat', {'id':projet.id}) }}" class="btn btn-primary btn-fill  btn-sm" type="submit">Terminé</a>
+                                                <a href="{{ path('projet_etat_in', {'id':projet.id}) }}" class="btn btn-danger btn-fill  btn-sm" type="submit">Interrompu</a>             
+                                              </div>
+                                              {% if projet.done == 'c'  %}
+                                                {% if reason == 'v' %}
+
+                                              <form action="{{ path('etat_in', {'id':projet.id}) }}" method="POST">
+                                                <div  class="form-group">
+
+                                                        <label for="raison">Ajouter le raison d'interruption </label>
+                                                        <input type="text" name="raison" class="form-control">
+                                                        
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-fill  btn-sm pull-right"> + </button>
+                                              </form>
+                                                    
+                                                       {% else %}
+                                                       <p>Raison d'interruption :</p>
+                                                       <div class="alert alert-danger">{% if reason == '' %}Interrompu pour plusieurs raisons{% else %} {{reason}} {% endif %}</div> 
+                                                {% endif %}
+                                                {% endif %}
+                                            </td>
                                                 </tr>
                                       
                                  
@@ -58,52 +74,94 @@
                             </div>
                         </div>
                     </div>
+
                    
-  <div class="col-md-5">
+  <div class="col-md-4">
                         <div class="card ">
                             <div class="header">
-                                <h4 class="title">Commentaires</h4>
+                                <h4 class="title">Commentaires validés</h4>
                             </div>
                             <div class="content">
-                                <div class="table-full-width">
+                                <div class="table-full-width" style="overflow-x:auto;">
                                     <table class="table">
                                         <tbody>
                                           
                                           {% for commentaire in commentaires %}
+                                            {% if commentaire.validation == true %}
                                             <tr>
                                             <td>
-                                              {{commentaire.citoyen}}
+                                             <strong>{{commentaire.citoyen.nom}} {{commentaire.citoyen.prenom}}</strong> 
                                                 </td>
                                                 <td>{{commentaire.contenu}}</td>
                                                 <td class="td-actions text-right">
                                                   {% if commentaire.validation %}<button type="button" rel="tooltip" title="Déja Valider" class="btn btn-info btn-simple btn-xs disabled">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>{% else %} <button type="button" rel="tooltip" title="Valider" class="btn btn-info btn-simple btn-xs">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>{% endif %}
-                                              <button type="button" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+                                                      
+                                                   {% endif %}
+                                                   
+                                              <form action="{{ path('commentaire_delete', {'id':commentaire.id}) }}" method="DELETE">
+                                                        <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
+                                                    </form>
                                                         <i class="fa fa-times"></i>
                                                     </button>
+                                                 
                                                 </td>
                                              
                                             </tr>
+                                            {% endif %}
                                              {% endfor %}
                                        
                                         </tbody>
                                     </table>
                                 </div>
 
-                                <div class="footer">
-                                    <hr>
-
-                                    <div class="stats">
-                                      <button type="submit" class="btn btn-danger btn-fill  btn-sm">Vider</button>
-                                    </div>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
-                  </div>
-    
+                 
+
+    <div class="col-md-4">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">Commentaires non validés</h4>
+                            </div>
+                            <div class="content">
+                                <div class="table-full-width" style="overflow-x:auto;">
+                                    <table class="table">
+                                        <tbody>
+                                          
+                                          {% for commentaire in commentaires %}
+                                             {% if commentaire.validation == false %}
+                                            <tr>
+                                            <td>
+                                              {{commentaire.citoyen}}
+                                                </td>
+                                                <td>{{commentaire.contenu}}</td>
+                                                <td class="td-actions text-right"> 
+                                                  {% if commentaire.validation == false %}  <a href="{{ path('commentaire_valid', {'id':commentaire.id}) }}" type="submit" rel="tooltip" title="Valider" class="btn btn-info btn-simple btn-xs" >  <i class="fa fa-check-square-o"></i></a>{% endif %}
+                                                    <form action="{{ path('commentaire_delete', {'id':commentaire.id}, {}) }}" method="DELETE">
+                                                        <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
+                                                    </form>
+                                              
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </td>
+                                             
+                                            </tr>
+                                            {% endif %}
+                                             {% endfor %}
+                                       
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                             
+                            </div>
+                        </div>
+                    </div>
+
+
     
 {% endblock %}

@@ -7,7 +7,10 @@
           <div class="card mb-3">
             <div class="card-header">
                Liste des réclamations </div>
+                {% set i = 0 %}
           {% for reclamation in reclamations %}
+            {% if reclamation.commune == app.user %}
+               {% set i = i + 1 %}
               <a class="list-group-item list-group-item-action" href="{{ path('reclamation_show', { 'id': reclamation.id }) }}">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
@@ -19,8 +22,18 @@
                   </div>
                 </div>
               </a>
+            {% endif %} 
               
          {% endfor %}
+          {% if i == 0 %}
+            <div class="list-group-item list-group-item-action" href="#">
+            <div class="media-body">
+
+                    <p>Aucune Réclamation.</p> 
+
+                  </div>
+                     </div>
+          {% endif %}
          
           </div>
         </div>

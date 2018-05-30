@@ -6,7 +6,10 @@
           <div class="card mb-3">
             <div class="card-header">
                Liste des questions </div>
+               {% set i = 0 %}
           {% for question in questions %}
+            {% if question.commune == app.user %}
+                {% set i = i + 1 %}
               <a class="list-group-item list-group-item-action" href="{{ path('question_show', { 'id': question.id }) }}">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
@@ -17,9 +20,17 @@
                   </div>
                 </div>
               </a>
-              
+                {% endif %}
          {% endfor %}
-         
+         {% if i == 0 %}
+            <div class="list-group-item list-group-item-action" href="#">
+            <div class="media-body">
+
+                    <p>Aucune Question.</p> 
+
+                  </div>
+                     </div>
+          {% endif %}
           </div>
         </div>
         <!--Pagination-->

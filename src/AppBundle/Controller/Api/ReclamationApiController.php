@@ -233,7 +233,7 @@ class ReclamationApiController extends Controller
                           'id'=>$rec->getId(),
                           'contenu'=>$rec->getContenu(),
                           'etat'=> $et,
-                          'image'=> 'http://localhost/pfeapp/web/uploads/imageReclamation/'.$rec->getImage(),
+                          'image'=> $rec->getImage(),
                           'lat'=> $rec->getLat(),
                           'lng'=>$rec->getLng()
                         );

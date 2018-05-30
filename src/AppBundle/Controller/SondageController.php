@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Sondage controller.
  *
- * @Route("sondages")
+ * @Route("commune/sondages")
  */
 class SondageController extends Controller
 {
@@ -24,12 +24,15 @@ class SondageController extends Controller
      */
     public function indexAction()
     {
+        $commune = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $sondages = $em->getRepository('AppBundle:Sondage')->findAll();
+        $sondages = $em->getRepository('AppBundle:Sondage')->findBy(['commune'=>$commune]);
+        $nb=count($sondages);
 
         return $this->render('sondage/index.html.twig', array(
             'sondages' => $sondages,
+            'nb'=>$nb
         ));
     }
 
@@ -41,6 +44,7 @@ class SondageController extends Controller
      */
     public function newAction(Request $request)
     {
+        $commune = $this->getUser();
         $sondage = new Sondage();
         $form = $this->createForm('AppBundle\Form\SondageType', $sondage);
         $form->handleRequest($request);
@@ -48,7 +52,7 @@ class SondageController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $e = $this->getDoctrine()->getManager();
-            $citoyens = $e->getRepository('AppBundle:Liste')->findBy(['commune'=>'9', 'blocked'=> false]);
+            $citoyens = $e->getRepository('AppBundle:Liste')->findBy(['commune'=>$commune, 'blocked'=> false]);
 
              foreach ($citoyens as $citoyen) {
                 $cit=$citoyen->getCitoyen();
@@ -94,8 +98,18 @@ class SondageController extends Controller
     {
         $deleteForm = $this->createDeleteForm($sondage);
 
+        $e = $this->getDoctrine()->getManager();
+        if ($limite = $e->getRepository('AppBundle:LimiteSondage')->findOneBy(['sondage'=>$sondage])) {
+            $limite = $e->getRepository('AppBundle:LimiteSondage')->findOneBy(['sondage'=>$sondage]);
+            $l=$limite->getFin();
+        }else{
+            $l='';
+        }
+        
+
         return $this->render('sondage/show.html.twig', array(
             'sondage' => $sondage,
+            'limite'=>$l,
             'delete_form' => $deleteForm->createView(),
         ));
     }

@@ -1,59 +1,85 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Sondage</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ sondage.id }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ sondage.description }}</td>
-            </tr>
-            <tr>
-                <th>Termine</th>
-                <td>{% if sondage.termine %}Yes{% else %}No{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
+<a href="{{ path('sondage_index') }}" class="btn btn-default btn-fill ">Retourner à la liste</a> 
+<div></div><br>
 
-    <ul>
-        <li>
-            <a href="{{ path('sondage_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('sondage_edit', { 'id': sondage.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+
   <div class="row">
-     <div class="col-md-4">
+     <div class="col-md-6">
                         <div class="card">
 
                             <div class="header">
-                                <h4 class="title">Email Statistics</h4>
-                                <p class="category">Last Campaign Performance</p>
+                                <h4 class="title">Sondage</h4>
+                               
                             </div>
                             <div class="content">
-                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                    </div>
+                                 <p class="category">Description : {{ sondage.description }}</p>
+                      
+                                   
                                     <hr>
                                     <div class="stats">
-                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                        
+                                        {% if sondage.termine == true %}
+                                          <div class="alert alert-danger">Le sondage est terminé</div> 
+                                          <br>
+                                            
+                                           {% else %}
+                                            {% if limite == '' %}
+                                              <form action="#" method="POST">
+                                                <div  class="form-group">
+
+                                                        <label for="date">Ajouter Une date de  fin </label> 
+                                                        <input type="date" name="date" class="form-control">
+                                                        
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-fill  btn-sm pull-right"> + </button>
+                                              </form>
+                                                    {% else %}
+                                                        <div class="alert alert-danger">{{limite}}</div>
+                                                     {% endif %}
+                                                      {% endif %}
                                     </div>
-                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+
+                            <div class="header">
+                                <h4 class="title">Participation</h4>
+                               
+                            </div>
+                            <div class="content">
+                                 <p class="category">Description : {{ sondage.description }}</p>
+                      
+                                   
+                                    <hr>
+                                    <div class="stats">
+                        
+                                        {% if sondage.termine == true %}
+                                          <div class="alert alert-danger">Le sondage est terminé</div> 
+                                          <br>
+                                            
+                                           {% else %}
+                                            {% if limite == '' %}
+                                              <form action="#" method="POST">
+                                                <div  class="form-group">
+
+                                                        <label for="date">Ajouter Une date de  fin </label> 
+                                                        <input type="date" name="date" class="form-control">
+                                                        
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-fill  btn-sm pull-right"> + </button>
+                                              </form>
+                                                    {% else %}
+                                                        <div class="alert alert-danger">{{limite}}</div>
+                                                     {% endif %}
+                                                      {% endif %}
+                                    </div>
+                               
                             </div>
                         </div>
                     </div>
