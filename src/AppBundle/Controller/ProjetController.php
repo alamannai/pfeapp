@@ -39,8 +39,7 @@ class ProjetController extends Controller
         
 
         return $this->render('projet/index.html.twig', array(
-            'projets' => $projets,
-            'nb'=>count($projets)
+            'projets' => $projets
             ));
     }
 
@@ -76,6 +75,7 @@ class ProjetController extends Controller
 
                 $notif= new Notification();
                 $notif->setContenu('Nouveau Projet');
+                $notif->setDestination('m');
                 $time=new \DateTime(); 
                 $notif->setCitoyen($cit);
                 $notif->setCommune($commune);

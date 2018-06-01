@@ -1,167 +1,164 @@
-{% extends 'default/dashboard.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
 <a href="{{ path('projet_index') }}" class="btn btn-default btn-fill ">Retourner à la liste</a> 
 <div></div><br>
-
+<div class="row">
 <div class="col-md-4">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title"> Titre : <strong>{{ projet.sujet }}</strong></h4>
-                                
-                               
-                            </div>
-                            <div class="content">
-                                <div class="table-full-width">
-                                    <table class="table">
-                                        <tbody>
-                                         <tr>
-                                          <td> <img src="http://localhost/pfeapp/web/uploads/imageProjet/{{projet.image}}" class="img-responsive" alt="Cinque Terre"  width="300" height="200"></td>
-                                           
-                                            </tr>
-                                            <tr>
-                                             <td>Description : <p class="category">{{projet.contenu}}</p></td>
-                                             
-                                               
-                                                </tr>
-                                                <tr>
-                                             <td> <h3>Etat : <small>        {% if projet.done == 'b'  %}<p>Terminé</p> {% elseif projet.done == 'a'  %} <p>Encours</p>{% else %}<p>Interrompu</p>{% endif %}</small></h3>
-                                              <div class="btn-group">
+                        <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-suitcase"></i> Titre : <strong>{{ projet.sujet }}</strong></div>
+            <div class="list-group list-group-flush small">
+               
+               <div class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <img  class="img-thumbnail"  width="100%" src="http://localhost/pfeapp/web/uploads/imageProjet/{{projet.image}}" alt="Cinque Terre" ><br>
+                  <div class="media-body">
+                    <p></p>
+                   <strong>Description : </strong>  {{projet.contenu}} <br>
+                   <strong>Etat : </strong>        {% if projet.done == 'b'  %}Terminé{% elseif projet.done == 'a'  %}Encours{% else %}Interrompu{% endif %} <p></p>
+                             
                                                 <a href="{{ path('projet_etat', {'id':projet.id}) }}" class="btn btn-primary btn-fill  btn-sm" type="submit">Terminé</a>
-                                                <a href="{{ path('projet_etat_in', {'id':projet.id}) }}" class="btn btn-danger btn-fill  btn-sm" type="submit">Interrompu</a>             
-                                              </div>
+                                                <a href="{{ path('projet_etat_in', {'id':projet.id}) }}" class="btn btn-danger btn-fill  btn-sm" type="submit"  {% if projet.done == 'b'  %}disabled{% endif %}>Interrompu</a>             
+                                           
                                               {% if projet.done == 'c'  %}
                                                 {% if reason == 'v' %}
 
                                               <form action="{{ path('etat_in', {'id':projet.id}) }}" method="POST">
-                                                <div  class="form-group">
+                                           
 
                                                         <label for="raison">Ajouter le raison d'interruption </label>
                                                         <input type="text" name="raison" class="form-control">
                                                         
-                                                    </div>
+                                                   
                                                     <button type="submit" class="btn btn-info btn-fill  btn-sm pull-right"> + </button>
                                               </form>
                                                     
                                                        {% else %}
                                                        <p>Raison d'interruption :</p>
-                                                       <div class="alert alert-danger">{% if reason == '' %}Interrompu pour plusieurs raisons{% else %} {{reason}} {% endif %}</div> 
+                                                       <div class="alert alert-danger ">{% if reason == '' %}Interrompu pour plusieurs raisons{% else %} <small> {{reason}}</small> {% endif %}</div> 
                                                 {% endif %}
                                                 {% endif %}
-                                            </td>
-                                                </tr>
-                                      
-                                 
-                                        </tbody>
-                                    </table>
-                                </div>
+            
+             
+        
+                             
+                  </div>
+                   
+                  </div>
+                   </div>
+                </div>
 
-                                <div class="footer">
-                                    <hr>
-                                    
-                                    <div class="stats">
-                                     <div class="mr-3 d-inline-block"><i class="fa fa-fw fa-thumbs-up"></i> {{votes}}</div> |
-                                     Date debut : {{projet.dateDebut | date('Y-m-d') }} | Durée : {{projet.duree}} 
-                                     
-                                    </div>
-                                    <div class="pull-right">{{ form_start(delete_form) }}
+                 
+               <div class="card-footer small text-muted">
+                 <div class="mr-3 d-inline-block"><i class="fa fa-fw fa-thumbs-up"></i> {{votes}} | Date debut : {{projet.dateDebut | date('Y-m-d') }} | Durée : {{projet.duree}} 
+                    <div class="pull-right">{{ form_start(delete_form) }}
                                          <button type="submit" class="btn btn-danger btn-fill  btn-sm">Supprimer</button>
                                     {{ form_end(delete_form) }}</div>
+                 </div> 
                                     
-                                    
-                                </div>
-                            </div>
-                        </div>
+                                    </div>
+                                   
+               </div>
                     </div>
 
                    
   <div class="col-md-4">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">Commentaires validés</h4>
-                            </div>
-                            <div class="content">
-                                <div class="table-full-width" style="overflow-x:auto;">
-                                    <table class="table">
-                                        <tbody>
-                                          
-                                          {% for commentaire in commentaires %}
-                                            {% if commentaire.validation == true %}
-                                            <tr>
-                                            <td>
-                                             <strong>{{commentaire.citoyen.nom}} {{commentaire.citoyen.prenom}}</strong> 
-                                                </td>
-                                                <td>{{commentaire.contenu}}</td>
-                                                <td class="td-actions text-right">
-                                                  {% if commentaire.validation %}<button type="button" rel="tooltip" title="Déja Valider" class="btn btn-info btn-simple btn-xs disabled">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                      
-                                                   {% endif %}
-                                                   
-                                              <form action="{{ path('commentaire_delete', {'id':commentaire.id}) }}" method="DELETE">
-                                                        <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
-                                                    </form>
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                 
-                                                </td>
-                                             
-                                            </tr>
-                                            {% endif %}
-                                             {% endfor %}
-                                       
-                                        </tbody>
-                                    </table>
-                                </div>
+    <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-comment"></i> Commentaires validés</div>
+            <div class="list-group list-group-flush small">
+               {% set i = 0 %}
+               {% for commentaire in commentaires %}
+                    {% if commentaire.validation == true %}
+                        {% set i = i + 1 %}
+               <a class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <form action="{{ path('commentaire_delete', {'id':commentaire.id}) }}" method="DELETE">
+                      <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs pull-right">
+                                                           <i class="fa fa-times"></i>
+                        </button>
+                      </form>
+                  <img class="d-flex mr-3 img-circle" src="http://placehold.it/45x45" alt=""><br>
+                  <div class="media-body">
+                    <i class="fa fa-user"></i>
+                    <strong>{{commentaire.citoyen.nom}} {{commentaire.citoyen.prenom}}</strong><br><strong>Contenu : </strong>  {{commentaire.contenu}}
+                     <div class="text-muted smaller"><strong>Etat : </strong>Déja valider</div>
+                     
+                   <div class="text-muted smaller"> Commenter en : {{commentaire.createdAt | date('Y-m-d H:i:s')}}</div>
+                  </div>
+                </div>
+              </a>
+                 {% endif %}
+              {% endfor %}
+                   {% if i == 0 %}
+            <div class="list-group-item list-group-item-action" href="#">
+            <div class="media-body">
 
-                               
-                            </div>
-                        </div>
+                    <p>Aucun commentaire validé.</p> 
+
+                  </div>
+                     </div>
+          {% endif %}
+            </div>
+               <div class="card-footer small text-muted"></div>
+          </div>
                     </div>
                  
 
-    <div class="col-md-4">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">Commentaires non validés</h4>
-                            </div>
-                            <div class="content">
-                                <div class="table-full-width" style="overflow-x:auto;">
-                                    <table class="table">
-                                        <tbody>
-                                          
-                                          {% for commentaire in commentaires %}
-                                             {% if commentaire.validation == false %}
-                                            <tr>
-                                            <td>
-                                              {{commentaire.citoyen}}
-                                                </td>
-                                                <td>{{commentaire.contenu}}</td>
-                                                <td class="td-actions text-right"> 
-                                                  {% if commentaire.validation == false %}  <a href="{{ path('commentaire_valid', {'id':commentaire.id}) }}" type="submit" rel="tooltip" title="Valider" class="btn btn-info btn-simple btn-xs" >  <i class="fa fa-check-square-o"></i></a>{% endif %}
-                                                    <form action="{{ path('commentaire_delete', {'id':commentaire.id}, {}) }}" method="DELETE">
-                                                        <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
-                                                    </form>
-                                              
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                             
-                                            </tr>
-                                            {% endif %}
-                                             {% endfor %}
-                                       
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                             
-                            </div>
-                        </div>
-                    </div>
 
 
     
+
+     <div class="col-md-4">
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-comment"></i> Commentaires non validés</div>
+            <div class="list-group list-group-flush small">
+                 {% set i = 0 %}
+               {% for commentaire in commentaires %}
+                    {% if commentaire.validation == false %}
+                          {% set i = i + 1 %}
+               <a class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                   <form action="{{ path('commentaire_delete', {'id':commentaire.id}) }}" method="DELETE">
+                      <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs pull-right ">
+                                                           <i class="fa fa-times"></i>
+                        </button>
+                      </form>
+                  <img class="d-flex mr-3 img-circle" src="http://placehold.it/45x45" alt=""><br>
+                  <div class="media-body">
+                    <i class="fa fa-user"></i>
+                    <strong>{{commentaire.citoyen.nom}} {{commentaire.citoyen.prenom}}</strong><br><strong>Contenu : </strong>  {{commentaire.contenu}}
+                    <form action="{{ path('commentaire_valid', {'id':commentaire.id}) }}">
+                        <div class="text-muted smaller">Valider :
+                      <button type="submit" rel="tooltip" title="Valider" class="btn btn-danger btn-simple">
+                        <i class="fa fa-check-square-o"></i>
+                        </button>
+                        </div>
+                      </form>
+                    
+                <div class="text-muted smaller"><small>Commenter en : {{commentaire.createdAt | date('Y-m-d H:i:s')}}</small> </div>
+
+                  </div>
+                </div>
+              </a>
+                 {% endif %}
+              {% endfor %}
+               {% if i == 0 %}
+            <div class="list-group-item list-group-item-action" href="#">
+            <div class="media-body">
+
+                    <p>Aucun commentaire à valider.</p> 
+
+                  </div>
+                     </div>
+          {% endif %}
+            </div>
+               <div class="card-footer small text-muted"></div>
+          </div>
+</div>
+        </div> 
+          </div>
 {% endblock %}

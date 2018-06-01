@@ -2,69 +2,53 @@
 
 {% block body %}
     <a href="{{ path('reclamation_index') }}" class="btn btn-default btn-fill">Back to the list</a>
-    <h1>Réclamation</h1>
 
 
     
-            
+       <div></div><br>     
     
 
+<div class="row">
 
-
-                    <div class="col-md-8">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title"> Contenu : {{ reclamation.contenu }}</strong></h4>
-                                
-                               
-                            </div>
-                            <div class="content">
-                                <div class="overflow-x:auto;">
-                                    <table class="table">
-                                        <tbody>
-                                         <tr>
-                                          
-                                           
-                                            </tr>
-                                            <tr>
-                                                  <td> 
-                                             <h4>Etat : <small>{% if reclamation.closed %}<div class="alert alert-success">Fermé</div> {% else %}Encours 
+                    
+        <div class="col-md-8">
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-camera"></i></i> Envoyé par : <strong>{{reclamation.citoyen.nom}} {{reclamation.citoyen.prenom}}</strong>
+            </div>
+            <div class="list-group list-group-flush small">
+               
+               <div class="list-group-item list-group-item-action" href="#">
+                <div class="media">
+                  <p></p>
+                  <img  class="img-thumbnail"  width="100%" src="{{reclamation.image}}" alt="Cinque Terre" ><br>
+                  <div class="media-body">
+                   <strong>Description : </strong>  {{reclamation.contenu}} <br>
+                   <small>{% if reclamation.closed %}<p></p><div class="alert alert-success">Etat : Fermé</div> {% else %}<p></p><div class="alert alert-info">Etat : En traitement</div> 
                                              <a href="{{ path('reclamation_etat', {'id':reclamation.id}) }}" class="btn btn-success btn-fill  btn-sm" type="submit">Fermé</a>
-                                         {% endif %}</small></h4>
-                                              
-                                                </td>
-                                                </tr>
-                                                <tr>
-                                            <td> <img src="{{ reclamation.image }}" class="img-responsive" alt="Cinque Terre"  width="750" height="400"></td>
-                                               
-                                           
-                                             
-                                               
-                                                </tr>
-                                      
-                                 
-                                        </tbody>
-                                    </table>
-                                </div>
+                                         {% endif %}</small>
+                                               <p></p>
+             
+        
+                             
+                  </div>
+                   
+                  </div>
+                   </div>
+                </div>
 
-                                <div class="footer">
-                                    <hr>
-                                    
-                                    <div class="stats">
+                 
+               <div class="card-footer small text-muted">
+   
+                           Date dépot : {% if reclamation.createdAt %}{{ reclamation.createdAt|date('Y-m-d H:i:s') }}{% endif %}    
 
-                                     Date dépot : {% if reclamation.createdAt %}{{ reclamation.createdAt|date('Y-m-d H:i:s') }}{% endif %}
-                                 
-                                     
-                                 
-                                    </div>
-                                    {{ form_start(delete_form) }}
-                                        <button type="submit" class="btn btn-danger btn-fill pull-right btn-sm">Supprimer</button>
+             
+                {{ form_start(delete_form) }}
+                                        <button type="submit" class="btn btn-danger btn-fill btn-sm">Supprimer</button>
                                     {{ form_end(delete_form) }}
-                                    
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                  </div>
+                </div>
 
                      <div class="col-md-4">
                         <div class="card ">
@@ -105,4 +89,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+
 {% endblock %}

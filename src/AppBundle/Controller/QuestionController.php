@@ -23,9 +23,10 @@ class QuestionController extends Controller
      */
     public function indexAction()
     {
+        $commune = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $questions = $em->getRepository('AppBundle:Question')->findAll();
+        $questions = $em->getRepository('AppBundle:Question')->findBy(['commune'=> $commune ]);
 
         return $this->render('question/index.html.twig', array(
             'questions' => $questions,

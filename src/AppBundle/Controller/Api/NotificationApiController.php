@@ -164,7 +164,7 @@ class NotificationApiController extends Controller
         $citoyen=$log->getCitoyen();
 
         $emm = $this->getDoctrine()->getManager();
-        $notifs = $emm->getRepository('AppBundle:Notification')->findBy([ 'citoyen'=>$citoyen->getId(),'vue'=>false]);
+        $notifs = $emm->getRepository('AppBundle:Notification')->findBy([ 'citoyen'=>$citoyen->getId(),'vue'=>false , 'destination'=> 'm']);
                   if ($notifs) {
                      foreach ($notifs as $notif ) {
                                   $x = $this->getDoctrine()->getManager();

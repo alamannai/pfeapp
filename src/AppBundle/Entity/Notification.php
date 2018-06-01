@@ -29,6 +29,13 @@ class Notification
     private $contenu;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="destination", type="string", length=255)
+     */
+    private $destination;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="vue", type="boolean")
@@ -75,6 +82,30 @@ class Notification
     public function getContenu()
     {
         return $this->contenu;
+    }
+
+    /**
+     * Set destination
+     *
+     * @param string $destination
+     *
+     * @return Notification
+     */
+    public function setDestination($destination)
+    {
+        $this->destination = $destination;
+
+        return $this;
+    }
+
+    /**
+     * Get destination
+     *
+     * @return string
+     */
+    public function getDestination()
+    {
+        return $this->destination;
     }
 
     /**

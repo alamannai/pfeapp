@@ -14,8 +14,7 @@ class DefaultController extends Controller
    */
     public function showdashboardAction(Request $request)
     {
-       
-
+      
         return $this->render('default/dashboard.html.twig');
     }
 
@@ -41,4 +40,22 @@ class DefaultController extends Controller
 
         return $this->render('admin/admin.html.twig');
     }
+
+    /**
+   * @Route("/notifications", name="notifs")
+   */
+    public function notifsAction(Request $request)
+    {
+      $commune = $this->getUser();
+       $em = $this->getDoctrine()->getManager();
+        $notifications = $em->getRepository('AppBundle:Notification')->findBy(['commune'=> $commune, 'vue'=> false ,'destination'=>'w']);
+
+        if (empty($notifications)) {
+          $notifications='';
+        }
+        return $this->render('default/notification.html.twig', [
+            'notifications'=> $notifications
+          ]);
+    }
+    
 }

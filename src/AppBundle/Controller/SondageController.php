@@ -60,6 +60,7 @@ class SondageController extends Controller
 
                 $notif= new Notification();
                 $notif->setContenu('Nouveau Sondage');
+                $notif->setDestination('m');
                 $time=new \DateTime(); 
                 $notif->setCitoyen($cit);
                 $notif->setCommune($com);
@@ -105,12 +106,25 @@ class SondageController extends Controller
         }else{
             $l='';
         }
-        
+        $x=0;
+        $y=0;
+        if ($e->getRepository('AppBundle:Participation')->findBy(['sondage'=>$sondage])) {
+            $par = $e->getRepository('AppBundle:Participation')->findBy(['sondage'=>$sondage]);
+            foreach ($par as $p ) {
+                if ($p->getType() == true) {
+                    $x+=1;
+                }else{
+                    $y+=1;
+                }
+            }
+        }
 
         return $this->render('sondage/show.html.twig', array(
             'sondage' => $sondage,
             'limite'=>$l,
             'delete_form' => $deleteForm->createView(),
+            'pour'=>$x,
+            'contre'=>$y,
         ));
     }
 

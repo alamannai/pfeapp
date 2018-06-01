@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 
-  /**
+    /**
      * @Route("api/commune/{commune}/sondages")
      * 
      */  

@@ -274,6 +274,19 @@ public function getAllommentaires()
 
         return $this;
     }
+
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
       
 }
 

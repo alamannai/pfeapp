@@ -75,7 +75,7 @@ class ProjetController extends Controller
                         'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
                         'etat'=>$msg,
-                        'image'=> 'http://192.168.1.105:8000/uploads/imageProjet/'.$projet->getImage()
+                        'image'=> 'http://192.168.1.:8000/uploads/imageProjet/'.$projet->getImage()
                         
                     );
 
@@ -172,7 +172,7 @@ class ProjetController extends Controller
                         'votes'=>count($projet->getVotes()),
                         'commentaires'=>$projet->getCommentaires(),
                         'Etat'=>$msg,
-                        'image'=> 'http://192.168.1.105:8000/uploads/imageProjet/'.$projet->getImage()
+                        'image'=> 'http://192.168.:8000/uploads/imageProjet/'.$projet->getImage()
                     );
 
             $listepro= array(

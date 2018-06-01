@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Commentaire
@@ -34,6 +35,15 @@ class Commentaire
      * @ORM\Column(name="validation", type="boolean")
      */
     private $validation;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
 
 
     /**
@@ -128,6 +138,19 @@ class Commentaire
    public function setCitoyen(Citoyen $citoyen)
     {   
         $this->citoyen = $citoyen;
+    }
+
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }
 

@@ -146,8 +146,7 @@ class ReclamationApiController extends Controller
 
                                 if ($rec->getClosed()=== true) {
                                   $et='resolue';
-                                }elseif($rec->getClosed()=== null){
-                                  $et='En attente';
+                                
                                 }else{
                                   
                                   $et='En traitement';
@@ -222,8 +221,7 @@ class ReclamationApiController extends Controller
 
                                 if ($rec->getClosed()== true) {
                                   $et='resolue';
-                                }elseif($rec->getClosed()== null){
-                                  $et='En attente';
+                          
                                 }else{
                                   
                                   $et='En traitement';

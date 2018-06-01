@@ -40,7 +40,7 @@ class CommentaireController extends Controller
             if ($c == $commune) {
                 $em = $this->getDoctrine()->getManager();
                 $commentaires = $em->getRepository('AppBundle:Commentaire')->findBy(['projet' => $projet]);
-                $liste='';
+                $liste;
                 foreach ($commentaires as $commentaire) {
                     if ($commentaire->getValidation() == true) {
                         $nom = $commentaire->getCitoyen()->getNom();
@@ -61,14 +61,14 @@ class CommentaireController extends Controller
                 );
             } else {
                 $rep = array(
-                    'status' => true,
+                    'status' => false,
                     'data' => '',
                     'msg' => 'Invalide commune',
                 );
             }
         } else {
             $rep = array(
-                'status' => true,
+                'status' => false,
                 'data' => '',
                 'msg' => 'Invalid projet',
             );
@@ -76,6 +76,7 @@ class CommentaireController extends Controller
         $response = $serializer->serialize($rep, 'json');
         return new Response($response);
     }
+    
     /**
      * @Route("/new")
      * @Method("POST")
@@ -104,14 +105,14 @@ class CommentaireController extends Controller
 
                 if ($c == $commune) {
                     $commentaire = new Commentaire();
+                     $time=new \DateTime(); 
+                    $commentaire->setCreatedAt($time);
                     $commentaire->setCitoyen($citoyen);
                     $commentaire->setProjet($p);
                     $commentaire->setContenu($contenu);
                     $commentaire->setValidation(false);
 
-                    $form = $this->createForm(CommentaireType::class, $commentaire);
-                    $form->handleRequest($request);
-
+                    
                     $emm->persist($commentaire);
                     $emm->flush();
 

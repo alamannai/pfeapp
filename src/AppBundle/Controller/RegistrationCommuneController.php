@@ -34,13 +34,36 @@ class RegistrationCommuneController extends Controller
 
         
 
-        // Create a new blank commune and process the form
-        $commune = new Commune();
-        $form = $this->createForm(CommuneType::class, $commune);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        return $this->render('admin/register.html.twig', [
+            'gouvernorats'=> $governorats
+
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/register/add", name="add")
+     */
+    public function addAction(Request $request)
+    {   
+
+           $nom=$request->request->get('nom');  
+                  $pseudo=$request->request->get('pseudo');   
+                  $password=$request->request->get('password');
+                   $gov=$request->request->get('gouvernorat');
+
+        $commune = new Commune();
+
+
+
                     
+                $e = $this->getDoctrine()->getManager();
+        $gouvernorat = $e->getRepository('AppBundle:Gouvernorat')->findOneBy(['nom'=> $gov]);
+       
+
+
             // Encode the new users password
             $encoder = $this->get('security.password_encoder');
             $password = $encoder->encodePassword($commune, $commune->getPlainPassword());
@@ -49,19 +72,15 @@ class RegistrationCommuneController extends Controller
             // Set their role
             $commune->setRole('ROLE_COMMUNE');
 
+  $commune->setNom($nom);
+    $commune->setPseudo($pseudo);
+
             
             // Save
             $em = $this->getDoctrine()->getManager();
             $em->persist($commune);
             $em->flush();
 
-            return $this->redirectToRoute('login');
-        }
-
-        return $this->render('admin/register.html.twig', [
-            'form' => $form->createView(),
-            'gouvernorats'=> $governorats
-
-        ]);
+      return $this->redirectToRoute('admin');
     }
 }
